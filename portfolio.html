@@ -298,6 +298,13 @@ body.light .section p{color:var(--text);}
 .ann-view-title{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:900;color:var(--neon);text-shadow:0 0 12px var(--neon);margin-bottom:0.75rem;letter-spacing:0.06em;}
 .ann-view-msg{font-size:0.9rem;line-height:1.8;color:var(--text);margin-bottom:0.75rem;}
 .ann-view-from{font-size:0.6rem;color:var(--muted);font-family:'Orbitron',sans-serif;letter-spacing:0.1em;}
+.ann-view-img{width:100%;max-height:320px;object-fit:cover;border-radius:8px;margin-bottom:0.85rem;display:block;}
+.ann-popup-img{width:100%;max-height:240px;object-fit:cover;border-radius:8px;margin-bottom:1rem;display:block;}
+.ann-img-upload-area{border:2px dashed var(--gold);border-radius:8px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:8px;background:rgba(255,215,0,0.04);}
+.ann-img-upload-area:hover{border-color:var(--neon);background:rgba(0,255,247,0.05);}
+.ann-img-upload-label{font-size:0.65rem;color:var(--muted);font-family:'Orbitron',sans-serif;letter-spacing:0.08em;}
+.ann-img-preview{width:100%;border-radius:7px;max-height:160px;object-fit:cover;display:block;margin-top:8px;border:1px solid var(--border);}
+.ann-img-remove{font-size:0.6rem;color:var(--red);cursor:pointer;font-family:'Orbitron',sans-serif;margin-top:5px;display:inline-block;background:none;border:none;}
 .ann-empty-wrap{text-align:center;padding:3.5rem 1rem;}
 .ann-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;opacity:0.5;}
 .ann-empty-txt{font-family:'Orbitron',sans-serif;font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);}
@@ -591,6 +598,15 @@ body.party-on #confetti-canvas{display:block;}
             <div class="edit-field"><label style="color:var(--gold);">Title</label><input type="text" id="ann-title" placeholder="Announcement title"/></div>
             <div class="edit-field"><label style="color:var(--gold);">Message</label><textarea id="ann-msg" placeholder="Write the message..." style="min-height:70px;"></textarea></div>
             <div class="edit-field">
+              <label style="color:var(--gold);">Photo (optional)</label>
+              <div class="ann-img-upload-area" onclick="document.getElementById('ann-photo-upload').click()">
+                <span style="font-size:1.4rem;">🖼️</span><br/>
+                <span class="ann-img-upload-label">Click to upload a photo</span>
+              </div>
+              <img id="ann-photo-preview" class="ann-img-preview" style="display:none;"/>
+              <button class="ann-img-remove" id="ann-photo-remove" style="display:none;" onclick="removeAnnPhoto()">✕ Remove photo</button>
+            </div>
+            <div class="edit-field">
               <label style="color:var(--gold);">Card Color</label>
               <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
                 <button class="btn" style="background:rgba(0,255,247,0.08);border-color:var(--neon);color:var(--neon);font-size:0.65rem;padding:5px 12px;" onclick="setAnnColor('neon')">🔵 Neon</button>
@@ -645,6 +661,7 @@ body.party-on #confetti-canvas{display:block;}
 
 <div class="toast" id="toast">Saved!</div>
 <input type="file" id="logo-upload" accept="image/*" onchange="handleLogoUpload(event)"/>
+<input type="file" id="ann-photo-upload" accept="image/*" onchange="handleAnnPhoto(event)" style="display:none;"/>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -670,6 +687,26 @@ const colorSchemes={
   green:{bg:'#001a08',border:'#00ff88',title:'#00ff88',text:'#ccffe0',btn:'#00ff88',btnTxt:'#000',overlay:'rgba(0,10,4,0.97)'}
 };
 let selectedAnnColor='neon';
+let annPhotoData=null; /* base64 image for current announcement being composed */
+
+window.handleAnnPhoto=function(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    annPhotoData=ev.target.result;
+    const preview=document.getElementById('ann-photo-preview');
+    const remove=document.getElementById('ann-photo-remove');
+    preview.src=annPhotoData;preview.style.display='block';remove.style.display='inline-block';
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+};
+window.removeAnnPhoto=function(){
+  annPhotoData=null;
+  document.getElementById('ann-photo-preview').style.display='none';
+  document.getElementById('ann-photo-remove').style.display='none';
+  document.getElementById('ann-photo-preview').src='';
+};
 let users={},loggedInId=null,viewingId=null,editMode=false,partyOn=false;
 const allIds=()=>Object.keys(passwords).map(Number);
 
@@ -848,6 +885,10 @@ function showAnnPopup(data){
   document.getElementById('ann-popup-title').style.color=scheme.title;document.getElementById('ann-popup-title').style.textShadow=`0 0 20px ${scheme.title}`;
   document.getElementById('ann-popup-title').textContent=data.title||'Announcement';
   document.getElementById('ann-popup-msg').style.color=scheme.text;document.getElementById('ann-popup-msg').textContent=data.msg||'';
+  /* photo in popup */
+  let photoEl=document.getElementById('ann-popup-photo');
+  if(!photoEl){photoEl=document.createElement('img');photoEl.id='ann-popup-photo';photoEl.className='ann-popup-img';card.insertBefore(photoEl,document.getElementById('ann-popup-msg'));}
+  if(data.photo){photoEl.src=data.photo;photoEl.style.display='block';}else{photoEl.style.display='none';}
   document.getElementById('ann-popup-from').style.color=scheme.border;
   const btn=document.getElementById('ann-close-btn');
   btn.style.color=scheme.btn;btn.style.borderColor=scheme.btn;
@@ -861,9 +902,11 @@ function renderAnnBoard(){
   const board=document.getElementById('ann-board');if(!board)return;
   if(!currentAnn){board.innerHTML='<div class="ann-empty-wrap"><span class="ann-empty-icon">📭</span><p class="ann-empty-txt">No announcements right now.</p></div>';return;}
   const scheme=colorSchemes[currentAnn.color]||colorSchemes.neon;
+  const photoHtml=currentAnn.photo?`<img class="ann-view-img" src="${currentAnn.photo}" alt="announcement photo"/>`:'';
   board.innerHTML=`<div class="ann-view-card" style="border-color:${scheme.border};background:${scheme.bg};box-shadow:0 0 30px ${scheme.border}25;">
     <div class="ann-view-tag" style="color:${scheme.border};">📢 PINNED ANNOUNCEMENT</div>
     <div class="ann-view-title" style="color:${scheme.title};text-shadow:0 0 12px ${scheme.title}40;">${esc(currentAnn.title||'Notice')}</div>
+    ${photoHtml}
     <div class="ann-view-msg" style="color:${scheme.text};">${esc(currentAnn.msg)}</div>
     <div class="ann-view-from" style="color:${scheme.border}60;">From: Saairishvanth · Manager</div>
   </div>`;
@@ -874,8 +917,11 @@ window.pinAnnouncement=async function(){
   if(loggedInId!==GOD_ID)return;
   const title=document.getElementById('ann-title').value.trim();const msg=document.getElementById('ann-msg').value.trim();
   if(!msg){showToast('Enter a message!');return;}
-  await set(ref(db,'announcement'),{title:title||'Announcement',msg,color:selectedAnnColor});
-  document.getElementById('ann-title').value='';document.getElementById('ann-msg').value='';showToast('Announcement pinned!');
+  const payload={title:title||'Announcement',msg,color:selectedAnnColor};
+  if(annPhotoData)payload.photo=annPhotoData;
+  await set(ref(db,'announcement'),payload);
+  document.getElementById('ann-title').value='';document.getElementById('ann-msg').value='';
+  removeAnnPhoto();showToast('Announcement pinned!');
 };
 window.clearAnnouncement=async function(){if(loggedInId!==GOD_ID)return;await set(ref(db,'announcement'),null);showToast('Cleared!');};
 window.setAnnColor=function(c){
