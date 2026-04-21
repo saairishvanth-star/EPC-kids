@@ -396,14 +396,69 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 .complaint-text{font-size:13px;line-height:1.5;}
 .complaint-time{font-size:10px;color:var(--text-3);margin-top:5px;}
 
-/* ========== BEATS ========== */
-.beat-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-bottom:6px;}
-.beat-cell{aspect-ratio:1;border:1px solid var(--line);background:var(--panel-2);border-radius:5px;cursor:pointer;transition:all 0.1s;}
-.beat-cell.on{background:var(--accent-soft);border-color:var(--accent);}
-.beat-cell.playing{background:var(--accent)!important;border-color:var(--accent)!important;}
-.beat-row-label{font-size:10px;color:var(--text-3);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;}
-.bpm-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.bpm-val{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);min-width:36px;font-weight:600;}
+/* ========== MUSIC ========== */
+.now-playing{
+  background:linear-gradient(135deg,rgba(0,240,255,0.06),rgba(255,43,214,0.04));
+  border:1px solid var(--accent-line);border-radius:var(--r);
+  padding:18px 18px;margin-bottom:14px;
+  display:flex;align-items:center;gap:14px;
+  position:relative;overflow:hidden;
+}
+.now-playing::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 50%,rgba(0,240,255,0.12),transparent 60%);
+  pointer-events:none;animation:pulse 3s infinite;
+}
+.np-art{
+  width:56px;height:56px;border-radius:var(--r-sm);
+  background:var(--accent-soft);border:1px solid var(--accent-line);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  color:var(--accent);font-size:22px;position:relative;z-index:1;
+  box-shadow:0 0 14px rgba(0,240,255,0.15);
+}
+.np-art.playing::after{
+  content:'';position:absolute;inset:-2px;border-radius:var(--r-sm);
+  border:1px solid var(--accent);animation:pulse 1.2s infinite;
+}
+.np-info{flex:1;min-width:0;position:relative;z-index:1;}
+.np-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.np-artist{font-size:12px;color:var(--text-3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.np-controls{display:flex;gap:6px;align-items:center;position:relative;z-index:1;}
+.np-btn{
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--line-2);
+  background:var(--panel);color:var(--text);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all 0.15s;
+}
+.np-btn:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px var(--accent-glow);}
+.np-btn.main{width:46px;height:46px;background:var(--accent);color:#000;border-color:var(--accent);box-shadow:0 0 16px var(--accent-glow);}
+.np-btn.main:hover{background:#33f5ff;border-color:#33f5ff;}
+.np-progress{margin-top:12px;position:relative;z-index:1;}
+.np-time-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3);margin-top:4px;}
+.np-bar{width:100%;height:4px;background:var(--panel-2);border-radius:2px;cursor:pointer;position:relative;overflow:hidden;}
+.np-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:2px;width:0%;transition:width 0.1s linear;box-shadow:0 0 6px var(--accent-glow);}
+
+.song-row{
+  display:flex;align-items:center;gap:11px;padding:11px 14px;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r);
+  cursor:pointer;transition:all 0.12s;margin-bottom:6px;
+}
+.song-row:hover{border-color:var(--line-2);transform:translateX(2px);}
+.song-row.playing{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 14px rgba(0,240,255,0.1);}
+.song-row.playing .song-title{color:var(--accent);text-shadow:0 0 6px var(--accent-glow);}
+.song-num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-3);width:24px;text-align:center;flex-shrink:0;}
+.song-row.playing .song-num{color:var(--accent);}
+.song-info{flex:1;min-width:0;}
+.song-title{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.song-artist{font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.song-dur{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3);}
+.song-actions{display:flex;gap:4px;}
+.song-icon-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.song-icon-btn:hover{color:var(--accent);border-color:var(--accent-line);}
+.song-icon-btn.danger:hover{color:var(--red);border-color:var(--red);}
+
+.upload-progress{height:3px;background:var(--panel-2);border-radius:2px;margin-top:8px;overflow:hidden;display:none;}
+.upload-progress.show{display:block;}
+.upload-progress-bar{height:100%;background:var(--accent);box-shadow:0 0 6px var(--accent-glow);width:0%;transition:width 0.2s;}
 
 /* ========== GOD MODE ========== */
 .god-row{
@@ -514,7 +569,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
         <button class="sb-item" id="nav-voting" onclick="go('voting')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Voting</button>
         <button class="sb-item" id="nav-leaderboard" onclick="go('leaderboard')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Leaderboard</button>
         <button class="sb-item" id="nav-complaints" onclick="go('complaints')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Complaints</button>
-        <button class="sb-item" id="nav-beats" onclick="go('beats')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Beats</button>
+        <button class="sb-item" id="nav-music" onclick="go('music')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Music</button>
 
         <button class="sb-item god-only" id="nav-god" onclick="go('god')" style="display:none;"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>God Mode</button>
       </nav>
@@ -639,21 +694,46 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
         </div>
       </div>
 
-      <!-- BEATS -->
-      <div class="page" id="page-beats" style="display:none;">
-        <div class="page-h"><div><div class="page-title">Beat <span class="serif accent">machine</span></div><div class="page-sub">Tap cells to build a beat. 8 steps × 4 sounds.</div></div></div>
+      <!-- MUSIC -->
+      <div class="page" id="page-music" style="display:none;">
+        <div class="page-h"><div><div class="page-title">Music <span class="serif accent">player</span></div><div class="page-sub">Listen to songs uploaded by the manager</div></div></div>
+
+        <div class="card" id="np-card" style="display:none;">
+          <div class="now-playing">
+            <div class="np-art" id="np-art">♪</div>
+            <div class="np-info">
+              <div class="np-title" id="np-title">—</div>
+              <div class="np-artist" id="np-artist">—</div>
+              <div class="np-progress">
+                <div class="np-bar" id="np-bar"><div class="np-bar-fill" id="np-bar-fill"></div></div>
+                <div class="np-time-row"><span id="np-cur">0:00</span><span id="np-dur">0:00</span></div>
+              </div>
+            </div>
+            <div class="np-controls">
+              <button class="np-btn" onclick="musicPrev()" title="Previous"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+              <button class="np-btn main" id="np-play-btn" onclick="musicTogglePlay()" title="Play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" id="np-play-icon"><path d="M8 5v14l11-7z"/></svg></button>
+              <button class="np-btn" onclick="musicNext()" title="Next"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6z"/></svg></button>
+            </div>
+          </div>
+        </div>
+
         <div class="card">
-          <div class="bpm-row">
-            <span style="font-size:12px;color:var(--text-2);">BPM</span>
-            <input type="range" min="60" max="200" value="120" id="bpm-slider" oninput="updateBpm(this.value)" style="flex:1;accent-color:var(--accent);"/>
-            <span class="bpm-val" id="bpm-val">120</span>
+          <div class="card-h"><div><div class="card-title">Playlist</div><div class="card-sub" id="playlist-count">0 songs</div></div></div>
+          <div id="song-list"><div class="empty">No songs yet.</div></div>
+        </div>
+
+        <div class="card" id="music-upload-card" style="display:none;">
+          <div class="card-h"><div><div class="card-title">🎵 Upload song</div><div class="card-sub">Max ~3.5 MB per file · MP3 recommended</div></div></div>
+          <div class="field"><label class="label">Song title</label><input class="input" type="text" id="song-title-input" placeholder="e.g. Blinding Lights"/></div>
+          <div class="field"><label class="label">Artist (optional)</label><input class="input" type="text" id="song-artist-input" placeholder="e.g. The Weeknd"/></div>
+          <div class="field"><label class="label">File</label>
+            <div class="upload-area" onclick="document.getElementById('song-file-upload').click()">
+              <span class="upload-area-text" id="song-upload-text">Click to select an audio file</span>
+            </div>
+            <div class="upload-progress" id="song-progress"><div class="upload-progress-bar" id="song-progress-bar"></div></div>
+            <div class="err" id="song-err"></div>
           </div>
-          <div id="beat-rows"></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
-            <button class="btn btn-primary" id="play-btn" onclick="togglePlay()">▶ Play</button>
-            <button class="btn" onclick="clearBeats()">Clear</button>
-            <button class="btn" onclick="randomBeats()">Random</button>
-          </div>
+          <button class="btn btn-primary" id="song-upload-btn" onclick="uploadSong()" disabled>Upload song</button>
         </div>
       </div>
 
@@ -777,6 +857,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <div class="toast" id="toast">Saved</div>
 <input type="file" id="file-upload" accept="image/*" onchange="handleProfileUpload(event)"/>
 <input type="file" id="ann-photo-upload" accept="image/*" onchange="handleAnnPhoto(event)"/>
+<input type="file" id="song-file-upload" accept="audio/*" onchange="handleSongFile(event)"/>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -810,6 +891,8 @@ let calNotes={}; /* calNotes[YYYY-MM-DD] = "note text" */
 let lbNotes={};  /* lbNotes[userId] = "note text" */
 let lbRanks=[];  /* ordered array of userIds set manually by GOD */
 let lbRankSlots=3; /* how many rank pickers to show in God panel */
+let songs=[]; /* [{id,title,artist,data,ts}] */
+let currentSongIdx=-1;let audioEl=null;let songFileData=null;let songFileName='';
 let partyOn=false;
 const allIds=()=>Object.keys(passwords).map(Number);
 function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
@@ -873,8 +956,12 @@ async function init(){
     }
   });
   onValue(ref(db,'partymode'),s=>{partyOn=s.exists()?s.val():false;const lbl=document.getElementById('party-label'),btn=document.getElementById('party-btn');if(lbl)lbl.textContent='Party Mode: '+(partyOn?'ON':'OFF');if(btn)btn.textContent=partyOn?'Disable':'Enable';if(partyOn)document.body.style.animation='pulse 0.6s infinite';else document.body.style.animation='';});
+  onValue(ref(db,'songs'),s=>{
+    const v=s.exists()?s.val():{};
+    songs=Object.keys(v).map(k=>({id:k,...v[k]})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+    if(loggedInId&&document.getElementById('page-music').style.display!=='none')renderMusic();
+  });
 
-  buildBeatUI();
   document.getElementById('loading').style.display='none';
   document.getElementById('login').style.display='flex';
 }
@@ -902,7 +989,7 @@ window.login=async function(){
 
 window.logout=function(){
   loggedInId=null;viewingId=null;editMode=false;dmWithId=null;
-  if(playing){clearInterval(beatTimer);playing=false;}
+  if(audioEl){audioEl.pause();audioEl=null;}currentSongIdx=-1;
   if(dmUnsub){dmUnsub();dmUnsub=null;}
   document.getElementById('login-id').value='';document.getElementById('login-pw').value='';document.getElementById('login-err').textContent='';
   document.getElementById('login').style.display='flex';
@@ -925,7 +1012,7 @@ function updateSidebarUser(){
 
 /* ===== NAV ===== */
 window.go=function(tab){
-  ['profiles','dms','chat','announcements','calendar','voting','leaderboard','complaints','beats','god'].forEach(t=>{
+  ['profiles','dms','chat','announcements','calendar','voting','leaderboard','complaints','music','god'].forEach(t=>{
     const p=document.getElementById('page-'+t);if(p)p.style.display=t===tab?'block':'none';
     const n=document.getElementById('nav-'+t);if(n)n.classList.toggle('active',t===tab);
   });
@@ -936,6 +1023,7 @@ window.go=function(tab){
   if(tab==='calendar'){renderCalendar();renderCalDetail();}
   if(tab==='voting')renderVoting();
   if(tab==='leaderboard')renderLeaderboard();
+  if(tab==='music')renderMusic();
   closeSidebar();
 };
 
@@ -1420,20 +1508,137 @@ function renderComplaints(data){
   list.innerHTML=items.map(c=>`<div class="complaint"><div class="complaint-author">${esc(c.author)}</div><div class="complaint-text">${esc(c.text)}</div><div class="complaint-time">${new Date(c.ts).toLocaleString()}</div></div>`).join('');
 }
 
-/* ===== BEATS ===== */
-const BROWS=[{label:'KICK',freq:80,type:'sine',decay:0.4},{label:'SNARE',freq:200,type:'triangle',decay:0.2},{label:'HI-HAT',freq:800,type:'square',decay:0.08},{label:'CLAP',freq:1200,type:'sawtooth',decay:0.1}];
-const STEPS=8;
-let beatGrid=BROWS.map(()=>Array(STEPS).fill(false));
-let bpm=120,playing=false,step=0,beatTimer=null,audioCtx=null;
-function getAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
-function playSound(row){const ac=getAudio();const o=ac.createOscillator();const g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type=BROWS[row].type;o.frequency.setValueAtTime(BROWS[row].freq,ac.currentTime);if(row===1)o.frequency.exponentialRampToValueAtTime(50,ac.currentTime+0.1);g.gain.setValueAtTime(0.3,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+BROWS[row].decay);o.start(ac.currentTime);o.stop(ac.currentTime+BROWS[row].decay+0.05);}
-function buildBeatUI(){document.getElementById('beat-rows').innerHTML=BROWS.map((r,ri)=>`<div class="beat-row-label">${r.label}</div><div class="beat-grid">${Array(STEPS).fill(0).map((_,si)=>`<button class="beat-cell${beatGrid[ri][si]?' on':''}" id="bc-${ri}-${si}" onclick="toggleBeat(${ri},${si})"></button>`).join('')}</div>`).join('');}
-window.toggleBeat=(ri,si)=>{beatGrid[ri][si]=!beatGrid[ri][si];document.getElementById(`bc-${ri}-${si}`).classList.toggle('on',beatGrid[ri][si]);};
-window.updateBpm=v=>{bpm=parseInt(v);document.getElementById('bpm-val').textContent=v;if(playing){clearInterval(beatTimer);startBeatLoop();}};
-window.clearBeats=()=>{beatGrid=BROWS.map(()=>Array(STEPS).fill(false));buildBeatUI();};
-window.randomBeats=()=>{beatGrid=BROWS.map(()=>Array(STEPS).fill(0).map(()=>Math.random()>0.6));buildBeatUI();};
-function startBeatLoop(){const itv=(60/bpm/2)*1000;beatTimer=setInterval(()=>{BROWS.forEach((r,ri)=>{const b=document.getElementById(`bc-${ri}-${step}`);if(b){b.classList.add('playing');setTimeout(()=>b&&b.classList.remove('playing'),80);}if(beatGrid[ri][step])playSound(ri);});step=(step+1)%STEPS;},itv);}
-window.togglePlay=()=>{playing=!playing;document.getElementById('play-btn').textContent=playing?'⏹ Stop':'▶ Play';if(playing){step=0;startBeatLoop();}else clearInterval(beatTimer);};
+/* ===== MUSIC ===== */
+function fmt(sec){if(!sec||isNaN(sec))return '0:00';const m=Math.floor(sec/60);const s=Math.floor(sec%60);return `${m}:${String(s).padStart(2,'0')}`;}
+
+window.renderMusic=function(){
+  const card=document.getElementById('music-upload-card');
+  if(card)card.style.display=loggedInId===GOD_ID?'block':'none';
+  document.getElementById('playlist-count').textContent=`${songs.length} song${songs.length===1?'':'s'}`;
+  const list=document.getElementById('song-list');if(!list)return;
+  if(!songs.length){list.innerHTML='<div class="empty">No songs uploaded yet.</div>';document.getElementById('np-card').style.display='none';return;}
+  list.innerHTML=songs.map((s,i)=>{
+    const isPlaying=i===currentSongIdx;
+    const delBtn=loggedInId===GOD_ID?`<button class="song-icon-btn danger" onclick="event.stopPropagation();deleteSong('${s.id}')" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg></button>`:'';
+    return `<div class="song-row ${isPlaying?'playing':''}" onclick="playSongAt(${i})">
+      <div class="song-num">${isPlaying?'▶':String(i+1).padStart(2,'0')}</div>
+      <div class="song-info"><div class="song-title">${esc(s.title)}</div><div class="song-artist">${esc(s.artist||'Unknown artist')}</div></div>
+      <div class="song-actions">${delBtn}</div>
+    </div>`;
+  }).join('');
+  /* update now playing display if song exists */
+  if(currentSongIdx>=0&&currentSongIdx<songs.length){
+    document.getElementById('np-card').style.display='block';
+    const s=songs[currentSongIdx];
+    document.getElementById('np-title').textContent=s.title;
+    document.getElementById('np-artist').textContent=s.artist||'Unknown artist';
+  }
+};
+
+window.playSongAt=function(idx){
+  if(idx<0||idx>=songs.length)return;
+  if(!audioEl){audioEl=new Audio();audioEl.addEventListener('timeupdate',onAudioProgress);audioEl.addEventListener('ended',musicNext);audioEl.addEventListener('loadedmetadata',()=>document.getElementById('np-dur').textContent=fmt(audioEl.duration));}
+  currentSongIdx=idx;
+  const s=songs[idx];
+  audioEl.src=s.data;
+  audioEl.play().catch(e=>{console.error('play failed:',e);toast('Playback failed');});
+  document.getElementById('np-card').style.display='block';
+  document.getElementById('np-title').textContent=s.title;
+  document.getElementById('np-artist').textContent=s.artist||'Unknown artist';
+  document.getElementById('np-art').classList.add('playing');
+  setPlayIcon(true);
+  renderMusic();
+};
+
+function onAudioProgress(){
+  if(!audioEl)return;
+  const pct=audioEl.duration?(audioEl.currentTime/audioEl.duration)*100:0;
+  document.getElementById('np-bar-fill').style.width=pct+'%';
+  document.getElementById('np-cur').textContent=fmt(audioEl.currentTime);
+}
+
+function setPlayIcon(playing){
+  const icon=document.getElementById('np-play-icon');
+  if(!icon)return;
+  icon.innerHTML=playing?'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>':'<path d="M8 5v14l11-7z"/>';
+}
+
+window.musicTogglePlay=function(){
+  if(!audioEl||currentSongIdx<0){if(songs.length)playSongAt(0);return;}
+  if(audioEl.paused){audioEl.play();setPlayIcon(true);document.getElementById('np-art').classList.add('playing');}
+  else{audioEl.pause();setPlayIcon(false);document.getElementById('np-art').classList.remove('playing');}
+};
+window.musicNext=function(){if(!songs.length)return;const next=(currentSongIdx+1)%songs.length;playSongAt(next);};
+window.musicPrev=function(){if(!songs.length)return;if(audioEl&&audioEl.currentTime>3){audioEl.currentTime=0;return;}const prev=currentSongIdx<=0?songs.length-1:currentSongIdx-1;playSongAt(prev);};
+
+/* seek */
+document.addEventListener('click',e=>{
+  if(e.target.closest&&e.target.closest('#np-bar')&&audioEl&&audioEl.duration){
+    const bar=document.getElementById('np-bar');
+    const rect=bar.getBoundingClientRect();
+    const pct=(e.clientX-rect.left)/rect.width;
+    audioEl.currentTime=audioEl.duration*Math.max(0,Math.min(1,pct));
+  }
+});
+
+/* GOD: upload */
+window.handleSongFile=function(e){
+  const f=e.target.files[0];if(!f)return;
+  const err=document.getElementById('song-err');err.textContent='';
+  /* size check: base64 adds ~33% — Firebase item limit ~5MB, we'll say ~3.5MB raw */
+  if(f.size>3.7*1024*1024){
+    err.textContent=`File is ${(f.size/1024/1024).toFixed(1)} MB — needs to be under 3.5 MB`;
+    songFileData=null;songFileName='';document.getElementById('song-upload-btn').disabled=true;
+    document.getElementById('song-upload-text').textContent='Click to select an audio file';
+    return;
+  }
+  songFileName=f.name;
+  document.getElementById('song-upload-text').textContent=`📎 ${f.name} (${(f.size/1024/1024).toFixed(1)} MB)`;
+  /* auto-fill title if empty */
+  const titleInput=document.getElementById('song-title-input');
+  if(!titleInput.value.trim())titleInput.value=f.name.replace(/\.[^.]+$/,'');
+  const r=new FileReader();
+  r.onload=ev=>{songFileData=ev.target.result;document.getElementById('song-upload-btn').disabled=false;};
+  r.readAsDataURL(f);
+};
+
+window.uploadSong=async function(){
+  if(loggedInId!==GOD_ID)return;
+  const title=document.getElementById('song-title-input').value.trim();
+  const artist=document.getElementById('song-artist-input').value.trim();
+  const err=document.getElementById('song-err');err.textContent='';
+  if(!title){err.textContent='Enter a title';return;}
+  if(!songFileData){err.textContent='Pick a file first';return;}
+  const btn=document.getElementById('song-upload-btn');btn.disabled=true;btn.textContent='Uploading…';
+  const progress=document.getElementById('song-progress');progress.classList.add('show');
+  document.getElementById('song-progress-bar').style.width='50%';
+  try{
+    await push(ref(db,'songs'),{title,artist,data:songFileData,ts:Date.now()});
+    document.getElementById('song-progress-bar').style.width='100%';
+    toast('Song uploaded!');
+    setTimeout(()=>{progress.classList.remove('show');document.getElementById('song-progress-bar').style.width='0%';},800);
+    /* reset form */
+    document.getElementById('song-title-input').value='';
+    document.getElementById('song-artist-input').value='';
+    document.getElementById('song-upload-text').textContent='Click to select an audio file';
+    songFileData=null;songFileName='';
+  }catch(e){
+    console.error(e);
+    err.textContent='Upload failed — file may be too large';
+    progress.classList.remove('show');document.getElementById('song-progress-bar').style.width='0%';
+  }
+  btn.textContent='Upload song';btn.disabled=false;
+};
+
+window.deleteSong=async function(id){
+  if(loggedInId!==GOD_ID)return;
+  if(!confirm('Delete this song?'))return;
+  const idx=songs.findIndex(s=>s.id===id);
+  await set(ref(db,'songs/'+id),null);
+  if(idx===currentSongIdx){if(audioEl)audioEl.pause();currentSongIdx=-1;document.getElementById('np-card').style.display='none';}
+  else if(idx<currentSongIdx)currentSongIdx--;
+  toast('Deleted');
+};
 
 /* ===== GOD MODE ===== */
 function renderGod(){
