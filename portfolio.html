@@ -698,10 +698,15 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
         </div>
 
         <div class="card">
-          <div class="card-h"><div><div class="card-title">🏆 Leaderboard</div><div class="card-sub">Custom title shown to everyone</div></div></div>
+          <div class="card-h"><div><div class="card-title">🏆 Leaderboard</div><div class="card-sub">Set ranks manually — only chosen members appear</div></div></div>
           <div class="field"><label class="label">Title</label><input class="input" type="text" id="lb-title-input" placeholder="e.g. Top Members This Month"/></div>
           <div class="field"><label class="label">Subtitle</label><textarea id="lb-sub-input" placeholder="Description shown below the title"></textarea></div>
-          <button class="btn btn-primary btn-sm" onclick="saveLbMeta()">Save</button>
+          <button class="btn btn-primary btn-sm" style="margin-bottom:16px;" onclick="saveLbMeta()">Save title</button>
+
+          <div class="profile-label" style="margin-top:10px;">Set rankings</div>
+          <div class="card-sub" style="margin-bottom:12px;">Pick who goes in each position (1st, 2nd, 3rd, etc). Choose "— none —" to hide a position.</div>
+          <div id="god-rank-pickers"></div>
+          <button class="btn btn-sm" style="margin-top:10px;" onclick="addRankSlot()">+ Add another rank</button>
         </div>
 
         <div class="card"><div class="card-title">🔑 Passwords</div><div id="god-pw" style="margin-top:12px;"></div></div>
@@ -803,6 +808,8 @@ let voteData={title:'',candidates:{},votes:{}};
 let lbMeta={title:'Leaderboard',sub:'Ranked by points'};
 let calNotes={}; /* calNotes[YYYY-MM-DD] = "note text" */
 let lbNotes={};  /* lbNotes[userId] = "note text" */
+let lbRanks=[];  /* ordered array of userIds set manually by GOD */
+let lbRankSlots=3; /* how many rank pickers to show in God panel */
 let partyOn=false;
 const allIds=()=>Object.keys(passwords).map(Number);
 function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
@@ -856,6 +863,15 @@ async function init(){
   onValue(ref(db,'leaderboardMeta'),s=>{if(s.exists()){lbMeta={title:s.val().title||'Leaderboard',sub:s.val().sub||'Ranked by points'};}if(loggedInId&&document.getElementById('page-leaderboard').style.display!=='none')renderLeaderboard();});
   onValue(ref(db,'calNotes'),s=>{calNotes=s.exists()?s.val():{};if(loggedInId&&document.getElementById('page-calendar').style.display!=='none'){renderCalendar();renderCalDetail();}});
   onValue(ref(db,'lbNotes'),s=>{lbNotes=s.exists()?s.val():{};if(loggedInId&&document.getElementById('page-leaderboard').style.display!=='none')renderLeaderboard();});
+  onValue(ref(db,'lbRanks'),s=>{
+    const v=s.exists()?s.val():null;
+    lbRanks=Array.isArray(v)?v:(v?Object.values(v):[]);
+    if(lbRanks.length>lbRankSlots)lbRankSlots=lbRanks.length;
+    if(loggedInId){
+      if(document.getElementById('page-leaderboard').style.display!=='none')renderLeaderboard();
+      if(document.getElementById('page-god').style.display!=='none')renderRankPickers();
+    }
+  });
   onValue(ref(db,'partymode'),s=>{partyOn=s.exists()?s.val():false;const lbl=document.getElementById('party-label'),btn=document.getElementById('party-btn');if(lbl)lbl.textContent='Party Mode: '+(partyOn?'ON':'OFF');if(btn)btn.textContent=partyOn?'Disable':'Enable';if(partyOn)document.body.style.animation='pulse 0.6s infinite';else document.body.style.animation='';});
 
   buildBeatUI();
@@ -1280,11 +1296,19 @@ window.renderLeaderboard=function(){
   const ti=document.getElementById('lb-title-input'),si=document.getElementById('lb-sub-input');
   if(ti&&document.activeElement!==ti)ti.value=lbMeta.title||'';
   if(si&&document.activeElement!==si)si.value=lbMeta.sub||'';
-  const sorted=allIds().filter(id=>users[id]).map(id=>({id,...users[id]})).sort((a,b)=>(b.points||0)-(a.points||0));
   const list=document.getElementById('lb-list');if(!list)return;
-  if(!sorted.length){list.innerHTML='<div class="empty">No members yet.</div>';return;}
-  list.innerHTML=sorted.map((u,i)=>{
-    const r=i+1;const cls=r===1?'gold':r===2?'silver':r===3?'bronze':'';
+  /* manual ranks set by GOD — only include non-empty slots where user still exists */
+  const ranked=lbRanks.filter(id=>id&&users[id]).map((id,i)=>({rank:i+1,id:parseInt(id),...users[id]}));
+  if(!ranked.length){
+    if(loggedInId===GOD_ID){
+      list.innerHTML='<div class="empty">No rankings set yet.<br/><span style="font-size:12px;">Go to God Mode → Leaderboard to pick 1st, 2nd, 3rd…</span></div>';
+    }else{
+      list.innerHTML='<div class="empty">Rankings haven\'t been announced yet.</div>';
+    }
+    return;
+  }
+  list.innerHTML=ranked.map(u=>{
+    const r=u.rank;const cls=r===1?'gold':r===2?'silver':r===3?'bronze':'';
     const top=r<=3?'top':'';const lbl=String(r).padStart(2,'0');
     const note=lbNotes[u.id];
     const noteHtml=note?`<span class="lb-note">◆ ${esc(note)}</span>`:'';
@@ -1307,6 +1331,61 @@ window.renderLeaderboard=function(){
       <div class="lb-pts">${u.points||0}</div>
     </div>`;
   }).join('');
+};
+
+/* ===== RANK PICKERS (God Mode) ===== */
+window.renderRankPickers=function(){
+  const wrap=document.getElementById('god-rank-pickers');if(!wrap)return;
+  const ids=allIds();
+  const slots=Math.max(lbRankSlots,lbRanks.length,3);
+  const suffix=n=>{const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);};
+  let html='';
+  for(let i=0;i<slots;i++){
+    const selectedId=lbRanks[i]||'';
+    const options=ids.map(id=>{
+      const u=users[id]||{name:'User #'+id};
+      const used=lbRanks.indexOf(String(id))!==-1||lbRanks.indexOf(id)!==-1;
+      const isThisSlot=String(selectedId)===String(id);
+      const disabled=used&&!isThisSlot?'disabled':'';
+      const selected=isThisSlot?'selected':'';
+      return `<option value="${id}" ${selected} ${disabled}>${esc(u.name)}${used&&!isThisSlot?' (taken)':''}</option>`;
+    }).join('');
+    html+=`<div class="god-row">
+      <span class="god-name" style="min-width:60px;flex:0;font-family:Orbitron,sans-serif;color:var(--accent);">${suffix(i+1)}</span>
+      <select class="input god-input" onchange="setRank(${i},this.value)">
+        <option value="">— none —</option>
+        ${options}
+      </select>
+      ${i>=3?`<button class="btn btn-sm btn-danger" onclick="removeRankSlot(${i})">Remove slot</button>`:''}
+    </div>`;
+  }
+  wrap.innerHTML=html;
+};
+
+window.setRank=async function(idx,userId){
+  if(loggedInId!==GOD_ID)return;
+  const newRanks=[...lbRanks];
+  while(newRanks.length<=idx)newRanks.push('');
+  newRanks[idx]=userId?parseInt(userId):'';
+  /* clear any other slot that had this user */
+  if(userId){
+    for(let i=0;i<newRanks.length;i++){
+      if(i!==idx&&String(newRanks[i])===String(userId))newRanks[i]='';
+    }
+  }
+  await set(ref(db,'lbRanks'),newRanks);toast('Rank set');
+};
+window.addRankSlot=function(){
+  if(loggedInId!==GOD_ID)return;
+  lbRankSlots=Math.max(lbRankSlots,lbRanks.length)+1;
+  renderRankPickers();
+};
+window.removeRankSlot=async function(idx){
+  if(loggedInId!==GOD_ID)return;
+  const newRanks=[...lbRanks];
+  newRanks.splice(idx,1);
+  lbRankSlots=Math.max(3,newRanks.length);
+  await set(ref(db,'lbRanks'),newRanks);toast('Slot removed');
 };
 
 window.saveLbNote=async function(id){
@@ -1367,6 +1446,7 @@ function renderGod(){
   document.getElementById('god-ban').innerHTML=ids.filter(id=>id!==GOD_ID).map(id=>{const u=users[id]||{name:'User #'+id};const b=u.banned||false;return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><span class="tag ${b?'danger':'success'}">${b?'Banned':'Active'}</span><button class="btn btn-sm ${b?'btn-success':'btn-danger'}" onclick="toggleBan(${id})">${b?'Unban':'Ban'}</button></div>`;}).join('');
   document.getElementById('god-del').innerHTML=ids.filter(id=>id!==GOD_ID).map(id=>{const u=users[id]||{name:'User #'+id};return `<div class="god-row"><span class="god-name">${esc(u.name)} <span class="god-id">#${id}</span></span><button class="btn btn-sm btn-danger" onclick="delAcc(${id})">Delete</button></div>`;}).join('');
   renderVoteGod();
+  renderRankPickers();
   const lt=document.getElementById('lb-title-input'),ls=document.getElementById('lb-sub-input');
   if(lt&&document.activeElement!==lt)lt.value=lbMeta.title||'';
   if(ls&&document.activeElement!==ls)ls.value=lbMeta.sub||'';
