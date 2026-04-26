@@ -315,6 +315,44 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 .upload-area-text{font-size:12px;color:var(--text-3);}
 .preview-img{width:100%;max-height:160px;object-fit:cover;border-radius:var(--r-sm);margin-top:8px;border:1px solid var(--line);}
 
+/* ========== CALL / JITSI ========== */
+.call-hero{
+  background:linear-gradient(135deg,rgba(0,240,255,0.08),rgba(255,43,214,0.06));
+  border:1px solid var(--accent-line);border-radius:var(--r-lg);
+  padding:36px 28px;text-align:center;margin-bottom:16px;
+  position:relative;overflow:hidden;
+}
+.call-hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 100%,rgba(0,240,255,0.15),transparent 60%);
+  pointer-events:none;
+}
+.call-hero-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--accent-soft);border:2px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--accent);font-size:30px;
+  margin:0 auto 16px;box-shadow:0 0 30px var(--accent-glow);
+  position:relative;z-index:1;
+}
+.call-hero-icon.live{animation:pulse 1.5s infinite;}
+.call-hero-title{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;position:relative;z-index:1;}
+.call-hero-sub{font-size:13px;color:var(--text-2);margin-bottom:20px;position:relative;z-index:1;line-height:1.5;}
+.call-hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+.call-status-tag{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;position:relative;z-index:1;}
+.call-status-tag .live-pulse{margin-left:0;width:7px;height:7px;}
+
+.jitsi-frame-wrap{
+  background:#000;border:1px solid var(--accent-line);border-radius:var(--r-lg);
+  overflow:hidden;position:relative;
+  box-shadow:0 0 40px rgba(0,240,255,0.1);
+}
+.jitsi-frame-wrap iframe{width:100%;height:calc(100vh - 200px);min-height:480px;border:0;display:block;}
+
+.call-info-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;gap:10px;flex-wrap:wrap;}
+.call-info-label{font-size:11px;color:var(--text-3);font-family:'Orbitron',sans-serif;letter-spacing:0.1em;text-transform:uppercase;}
+.call-info-val{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);}
+
 /* ========== CALENDAR ========== */
 .cal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .cal-month{font-size:15px;font-weight:600;letter-spacing:-0.01em;}
@@ -512,6 +550,42 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 @media(max-width:420px){.members{grid-template-columns:1fr;}}
 
 #file-upload,#ann-photo-upload{display:none;}
+
+/* Empty state box */
+.empty-state-box{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.5rem;text-align:center;background:var(--card);border:1px dashed var(--border);border-radius:14px;margin-top:1rem;}
+.empty-icon{font-size:3rem;margin-bottom:1rem;opacity:0.6;}
+.empty-title{font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;color:var(--neon);text-shadow:0 0 8px var(--neon);margin-bottom:0.5rem;letter-spacing:0.1em;}
+.empty-desc{font-size:0.8rem;color:var(--sub);line-height:1.6;}
+/* Marks / Results */
+.mark-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.mark-subject{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--neon);margin-bottom:4px;}
+.mark-score{font-size:1.4rem;font-weight:700;color:var(--txt);font-family:'Orbitron',sans-serif;}
+.mark-score span{font-size:0.75rem;color:var(--sub);font-family:'DM Sans',sans-serif;}
+.mark-grade{display:inline-block;padding:2px 10px;border-radius:20px;font-family:'Orbitron',sans-serif;font-size:0.62rem;font-weight:700;margin-left:8px;}
+.grade-a{background:rgba(0,255,136,0.15);border:1px solid var(--green);color:var(--green);}
+.grade-b{background:rgba(0,255,247,0.15);border:1px solid var(--neon);color:var(--neon);}
+.grade-c{background:rgba(255,215,0,0.15);border:1px solid var(--gold);color:var(--gold);}
+.grade-f{background:rgba(255,51,102,0.15);border:1px solid var(--red);color:var(--red);}
+.mark-member{font-size:0.72rem;color:var(--sub);margin-top:4px;}
+.mark-file-link{display:inline-flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--neon);margin-top:6px;text-decoration:none;cursor:pointer;}
+.mark-file-link:hover{text-shadow:0 0 6px var(--neon);}
+.mark-del{float:right;background:transparent;border:1px solid #330011;border-radius:5px;color:var(--red);font-size:0.6rem;padding:2px 7px;cursor:pointer;font-family:'Orbitron',sans-serif;}
+.mark-del:hover{background:var(--red);color:#000;}
+/* Events calendar */
+.event-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;border-left:3px solid var(--neon);}
+.event-card.past{border-left-color:var(--sub);opacity:0.6;}
+.event-card.today{border-left-color:var(--gold);box-shadow:0 0 12px rgba(255,215,0,0.2);}
+.event-date-badge{font-family:'Orbitron',sans-serif;font-size:0.62rem;color:var(--gold);margin-bottom:5px;letter-spacing:0.08em;}
+.event-title{font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:700;color:var(--txt);margin-bottom:4px;}
+.event-desc{font-size:0.78rem;color:var(--sub);line-height:1.5;}
+.event-countdown{font-size:0.65rem;color:var(--neon);font-family:'Orbitron',sans-serif;margin-top:5px;}
+/* Anthem */
+.anthem-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;}
+.anthem-num{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;color:var(--neon);width:28px;text-align:center;text-shadow:0 0 8px var(--neon);}
+.anthem-info{flex:1;}
+.anthem-title{font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;color:var(--txt);margin-bottom:2px;}
+.anthem-artist{font-size:0.72rem;color:var(--sub);}
+.anthem-note{font-size:0.65rem;color:var(--gold);margin-top:3px;font-style:italic;}
 </style>
 </head>
 <body>
@@ -562,6 +636,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
         <button class="sb-item active" id="nav-profiles" onclick="go('profiles')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Members</button>
         <button class="sb-item" id="nav-dms" onclick="go('dms')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Direct Messages</button>
         <button class="sb-item" id="nav-chat" onclick="go('chat')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Group Chat</button>
+        <button class="sb-item" id="nav-call" onclick="go('call')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call</button>
         <button class="sb-item" id="nav-announcements" onclick="go('announcements')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>Announcements</button>
 
         <div class="sb-section">Activity</div>
@@ -571,6 +646,10 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
         <button class="sb-item" id="nav-complaints" onclick="go('complaints')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Complaints</button>
         <button class="sb-item" id="nav-music" onclick="go('music')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Music</button>
 
+        <button class="sb-item" id="nav-marks" onclick="go('marks')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Marks</button>
+        <button class="sb-item" id="nav-results" onclick="go('results')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Results</button>
+        <button class="sb-item" id="nav-events" onclick="go('events')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="15" r="1" fill="currentColor"/><circle cx="12" cy="15" r="1" fill="currentColor"/></svg>Special Events</button>
+        <button class="sb-item" id="nav-anthem" onclick="go('anthem')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>EPC Anthem</button>
         <button class="sb-item god-only" id="nav-god" onclick="go('god')" style="display:none;"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>God Mode</button>
       </nav>
 
@@ -636,6 +715,52 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
           </div>
         </div>
       </div>
+
+      <!-- CALL -->
+      <div class="page" id="page-call" style="display:none;">
+        <div class="page-h"><div><div class="page-title">Voice <span class="serif accent">call</span></div><div class="page-sub">Group voice + video powered by Jitsi Meet</div></div></div>
+
+        <!-- No active call state -->
+        <div id="call-idle">
+          <div class="call-hero">
+            <div class="call-hero-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div class="call-hero-title">No active call</div>
+            <div class="call-hero-sub" id="call-idle-sub">Waiting for the manager to start a call…</div>
+            <div class="call-hero-actions" id="call-idle-actions"></div>
+          </div>
+        </div>
+
+        <!-- Active call state (before joining) -->
+        <div id="call-active-lobby" style="display:none;">
+          <div class="call-hero">
+            <div class="call-status-tag"><span class="live-pulse"></span> Live now</div>
+            <div class="call-hero-icon live"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div class="call-hero-title">Call in progress</div>
+            <div class="call-hero-sub" id="call-lobby-sub">Started by the manager — click Join to enter</div>
+            <div class="call-hero-actions">
+              <button class="btn btn-primary" onclick="joinCall()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Join call</button>
+              <button class="btn" onclick="openCallInTab()">Open in new tab</button>
+              <button class="btn btn-danger" id="call-end-btn" onclick="endCall()" style="display:none;">End call for everyone</button>
+            </div>
+          </div>
+          <div class="call-info-row">
+            <span class="call-info-label">Room</span>
+            <span class="call-info-val" id="call-room-id">—</span>
+            <button class="btn btn-sm" onclick="copyCallLink()">Copy link</button>
+          </div>
+        </div>
+
+        <!-- In call (iframe) -->
+        <div id="call-in" style="display:none;">
+          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+            <button class="btn btn-danger" onclick="leaveCall()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.1-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.52-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg> Leave call</button>
+            <button class="btn" id="call-end-btn-2" onclick="endCall()" style="display:none;">End call for everyone</button>
+          </div>
+          <div class="jitsi-frame-wrap" id="jitsi-wrap"></div>
+        </div>
+
+      </div>
+      <!-- /CALL -->
 
       <!-- ANNOUNCEMENTS -->
       <div class="page" id="page-announcements" style="display:none;">
@@ -737,6 +862,30 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
         </div>
       </div>
 
+      <!-- MARKS -->
+      <div class="page" id="page-marks" style="display:none;">
+        <div class="page-h"><div><div class="page-title">Marks <span class="serif accent">& exams</span></div><div class="page-sub">Exam files and scores uploaded by the manager</div></div></div>
+        <div id="marks-list"><div class="empty-state-box"><span class="empty-icon">📋</span><div class="empty-title">Coming Soon</div><div class="empty-desc">No marks or exam files have been uploaded yet.</div></div></div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="page" id="page-results" style="display:none;">
+        <div class="page-h"><div><div class="page-title">Results</div><div class="page-sub">Official exam results published by the manager</div></div></div>
+        <div id="results-list"><div class="empty-state-box"><span class="empty-icon">📊</span><div class="empty-title">Coming Soon</div><div class="empty-desc">No results have been published yet.</div></div></div>
+      </div>
+
+      <!-- SPECIAL EVENTS CALENDAR -->
+      <div class="page" id="page-events" style="display:none;">
+        <div class="page-h"><div><div class="page-title">Special <span class="serif accent">events</span></div><div class="page-sub">Upcoming events and activities</div></div></div>
+        <div id="events-list"><div class="empty-state-box"><span class="empty-icon">📅</span><div class="empty-title">Coming Soon</div><div class="empty-desc">No special events have been scheduled yet.</div></div></div>
+      </div>
+
+      <!-- EPC ANTHEM -->
+      <div class="page" id="page-anthem" style="display:none;">
+        <div class="page-h"><div><div class="page-title">EPC <span class="serif accent">anthem</span></div><div class="page-sub">Official song list of EPC Kids Association</div></div></div>
+        <div id="anthem-list"><div class="empty-state-box"><span class="empty-icon">🎵</span><div class="empty-title">Coming Soon</div><div class="empty-desc">The EPC anthem song list will be added soon.</div></div></div>
+      </div>
+
       <!-- GOD MODE -->
       <div class="page" id="page-god" style="display:none;">
         <div class="page-h"><div><div class="page-title">God <span class="serif accent">mode</span></div><div class="page-sub">Manager controls — Saairishvanth only</div></div></div>
@@ -814,6 +963,61 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
             <span style="font-size:13px;color:var(--text-2);" id="party-label">Party Mode: OFF</span>
             <button class="btn" id="party-btn" onclick="toggleParty()">Enable</button>
           </div>
+        <!-- MARKS MANAGER -->
+        <div class="card">
+          <div class="card-h"><div><div class="card-title">📋 Add Mark / Exam File</div><div class="card-sub">Upload exam results and files for members</div></div></div>
+          <div class="field"><label class="label">Subject / Exam Name</label><input class="input" type="text" id="mark-subject" placeholder="e.g. Mathematics Exam 1"/></div>
+          <div class="field"><label class="label">Member</label>
+            <select class="input" id="mark-member-sel"><option value="all">All Members</option></select>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <div class="field" style="flex:1;"><label class="label">Score</label><input class="input" type="number" id="mark-score" placeholder="e.g. 85"/></div>
+            <div class="field" style="flex:1;"><label class="label">Out of</label><input class="input" type="number" id="mark-total" placeholder="100" value="100"/></div>
+          </div>
+          <div class="field"><label class="label">Note (optional)</label><input class="input" type="text" id="mark-note" placeholder="e.g. Good improvement!"/></div>
+          <div class="field"><label class="label">Exam File (optional)</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="btn" onclick="document.getElementById('mark-file-input').click()">Choose File</button>
+              <span id="mark-file-name" style="font-size:0.75rem;color:var(--text-2);">No file chosen</span>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="addMark()">Add Mark</button>
+        </div>
+
+        <!-- RESULTS MANAGER -->
+        <div class="card">
+          <div class="card-h"><div><div class="card-title">📊 Publish Result</div><div class="card-sub">Post official exam results</div></div></div>
+          <div class="field"><label class="label">Result Title</label><input class="input" type="text" id="result-title" placeholder="e.g. Term 1 Final Results"/></div>
+          <div class="field"><label class="label">Date</label><input class="input" type="date" id="result-date"/></div>
+          <div class="field"><label class="label">Description</label><textarea class="input" id="result-desc" placeholder="Summary of results..." style="min-height:60px;resize:vertical;"></textarea></div>
+          <div class="field"><label class="label">Result File (optional)</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="btn" onclick="document.getElementById('result-file-input').click()">Choose File</button>
+              <span id="result-file-name" style="font-size:0.75rem;color:var(--text-2);">No file chosen</span>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="addResult()">Publish Result</button>
+        </div>
+
+        <!-- EVENTS MANAGER -->
+        <div class="card">
+          <div class="card-h"><div><div class="card-title">📅 Create Special Event</div><div class="card-sub">Schedule events for the calendar</div></div></div>
+          <div class="field"><label class="label">Event Title</label><input class="input" type="text" id="ev-title" placeholder="e.g. EPC Kids Annual Meet"/></div>
+          <div class="field"><label class="label">Date & Time</label><input class="input" type="datetime-local" id="ev-datetime"/></div>
+          <div class="field"><label class="label">Description</label><textarea class="input" id="ev-desc" placeholder="What's happening?" style="min-height:60px;resize:vertical;"></textarea></div>
+          <button class="btn btn-primary" onclick="addEvent()">Create Event</button>
+        </div>
+
+        <!-- ANTHEM MANAGER -->
+        <div class="card">
+          <div class="card-h"><div><div class="card-title">🎵 Add Anthem Song</div><div class="card-sub">Add songs to the EPC anthem list</div></div></div>
+          <div class="field"><label class="label">Song Title</label><input class="input" type="text" id="anthem-title" placeholder="e.g. EPC Theme Song"/></div>
+          <div class="field"><label class="label">Artist (optional)</label><input class="input" type="text" id="anthem-artist" placeholder="e.g. EPC Kids"/></div>
+          <div class="field"><label class="label">Link (optional)</label><input class="input" type="text" id="anthem-url" placeholder="e.g. YouTube / Spotify link"/></div>
+          <div class="field"><label class="label">Note (optional)</label><input class="input" type="text" id="anthem-note" placeholder="e.g. Official team anthem"/></div>
+          <button class="btn btn-primary" onclick="addAnthem()">Add Song</button>
+        </div>
+
         </div>
 
       </div>
@@ -858,6 +1062,8 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 <input type="file" id="file-upload" accept="image/*" onchange="handleProfileUpload(event)"/>
 <input type="file" id="ann-photo-upload" accept="image/*" onchange="handleAnnPhoto(event)"/>
 <input type="file" id="song-file-upload" accept="audio/*" onchange="handleSongFile(event)"/>
+<input type="file" id="mark-file-input" accept=".pdf,.doc,.docx,.jpg,.png" onchange="handleMarkFile(event)"/>
+<input type="file" id="result-file-input" accept=".pdf,.doc,.docx,.jpg,.png" onchange="handleResultFile(event)"/>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -893,6 +1099,8 @@ let lbRanks=[];  /* ordered array of userIds set manually by GOD */
 let lbRankSlots=3; /* how many rank pickers to show in God panel */
 let songs=[]; /* [{id,title,artist,data,ts}] */
 let currentSongIdx=-1;let audioEl=null;let songFileData=null;let songFileName='';
+let activeCall=null; /* {room,startedBy,startedByName,ts} or null */
+let callJoined=false;
 let partyOn=false;
 const allIds=()=>Object.keys(passwords).map(Number);
 function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
@@ -961,6 +1169,20 @@ async function init(){
     songs=Object.keys(v).map(k=>({id:k,...v[k]})).sort((a,b)=>(a.ts||0)-(b.ts||0));
     if(loggedInId&&document.getElementById('page-music').style.display!=='none')renderMusic();
   });
+  onValue(ref(db,'activeCall'),s=>{
+    activeCall=s.exists()&&s.val()&&s.val().room?s.val():null;
+    if(!activeCall&&callJoined){leaveCall(true);}
+    /* update sidebar badge */
+    const navBtn=document.getElementById('nav-call');
+    if(navBtn){
+      const existing=navBtn.querySelector('.live-pulse');
+      if(activeCall&&!existing){
+        const pulse=document.createElement('span');pulse.className='live-pulse';pulse.style.marginLeft='auto';
+        navBtn.appendChild(pulse);
+      }else if(!activeCall&&existing){existing.remove();}
+    }
+    if(loggedInId&&document.getElementById('page-call').style.display!=='none')renderCall();
+  });
 
   document.getElementById('loading').style.display='none';
   document.getElementById('login').style.display='flex';
@@ -990,6 +1212,7 @@ window.login=async function(){
 window.logout=function(){
   loggedInId=null;viewingId=null;editMode=false;dmWithId=null;
   if(audioEl){audioEl.pause();audioEl=null;}currentSongIdx=-1;
+  if(callJoined)leaveCall(true);
   if(dmUnsub){dmUnsub();dmUnsub=null;}
   document.getElementById('login-id').value='';document.getElementById('login-pw').value='';document.getElementById('login-err').textContent='';
   document.getElementById('login').style.display='flex';
@@ -1012,7 +1235,7 @@ function updateSidebarUser(){
 
 /* ===== NAV ===== */
 window.go=function(tab){
-  ['profiles','dms','chat','announcements','calendar','voting','leaderboard','complaints','music','god'].forEach(t=>{
+  ['profiles','dms','chat','call','announcements','calendar','voting','leaderboard','complaints','music','marks','results','events','anthem','god'].forEach(t=>{
     const p=document.getElementById('page-'+t);if(p)p.style.display=t===tab?'block':'none';
     const n=document.getElementById('nav-'+t);if(n)n.classList.toggle('active',t===tab);
   });
@@ -1024,6 +1247,11 @@ window.go=function(tab){
   if(tab==='voting')renderVoting();
   if(tab==='leaderboard')renderLeaderboard();
   if(tab==='music')renderMusic();
+  if(tab==='call')renderCall();
+  if(tab==='marks')renderMarks();
+  if(tab==='results')renderResults();
+  if(tab==='events')renderEvents();
+  if(tab==='anthem')renderAnthem();
   closeSidebar();
 };
 
@@ -1508,6 +1736,85 @@ function renderComplaints(data){
   list.innerHTML=items.map(c=>`<div class="complaint"><div class="complaint-author">${esc(c.author)}</div><div class="complaint-text">${esc(c.text)}</div><div class="complaint-time">${new Date(c.ts).toLocaleString()}</div></div>`).join('');
 }
 
+/* ===== CALL (Jitsi Meet) ===== */
+function callLink(){return activeCall?`https://meet.jit.si/${activeCall.room}`:'';}
+
+window.renderCall=function(){
+  const idle=document.getElementById('call-idle');
+  const lobby=document.getElementById('call-active-lobby');
+  const inCall=document.getElementById('call-in');
+  if(!activeCall){
+    idle.style.display='block';lobby.style.display='none';inCall.style.display='none';
+    const actions=document.getElementById('call-idle-actions');
+    const sub=document.getElementById('call-idle-sub');
+    if(loggedInId===GOD_ID){
+      sub.textContent='Start a voice call that everyone can join.';
+      actions.innerHTML=`<button class="btn btn-primary" onclick="startCall()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg> Start a call</button>`;
+    }else{
+      sub.textContent='Waiting for Saairishvanth to start a call…';
+      actions.innerHTML='';
+    }
+    if(callJoined){callJoined=false;document.getElementById('jitsi-wrap').innerHTML='';}
+    return;
+  }
+  if(callJoined){
+    idle.style.display='none';lobby.style.display='none';inCall.style.display='block';
+    document.getElementById('call-end-btn-2').style.display=loggedInId===GOD_ID?'inline-flex':'none';
+  }else{
+    idle.style.display='none';lobby.style.display='block';inCall.style.display='none';
+    document.getElementById('call-room-id').textContent=activeCall.room;
+    document.getElementById('call-lobby-sub').textContent=`Started by ${activeCall.startedByName||'the manager'} — click Join to enter`;
+    document.getElementById('call-end-btn').style.display=loggedInId===GOD_ID?'inline-flex':'none';
+  }
+};
+
+window.startCall=async function(){
+  if(loggedInId!==GOD_ID)return;
+  const u=users[loggedInId]||{name:'Manager'};
+  const room=`epc-kids-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`;
+  await set(ref(db,'activeCall'),{room,startedBy:loggedInId,startedByName:u.name,ts:Date.now()});
+  toast('Call started!');
+  setTimeout(()=>joinCall(),300);
+};
+
+window.endCall=async function(){
+  if(loggedInId!==GOD_ID)return;
+  if(!confirm('End the call for everyone?'))return;
+  await set(ref(db,'activeCall'),null);
+  leaveCall(true);
+  toast('Call ended');
+};
+
+window.joinCall=function(){
+  if(!activeCall)return;
+  callJoined=true;
+  const wrap=document.getElementById('jitsi-wrap');
+  const u=users[loggedInId]||{name:'Member'};
+  const name=encodeURIComponent(u.name||'Member');
+  /* jitsi config via URL hash — starts with audio only */
+  const cfg='#config.startWithVideoMuted=true&config.prejoinPageEnabled=false&config.disableDeepLinking=true&userInfo.displayName='+name;
+  wrap.innerHTML=`<iframe allow="camera; microphone; autoplay; display-capture; fullscreen" src="https://meet.jit.si/${activeCall.room}${cfg}"></iframe>`;
+  renderCall();
+};
+
+window.leaveCall=function(silent){
+  callJoined=false;
+  document.getElementById('jitsi-wrap').innerHTML='';
+  if(!silent&&loggedInId)renderCall();
+  else if(!loggedInId)return;
+  else renderCall();
+};
+
+window.openCallInTab=function(){
+  if(!activeCall)return;
+  window.open(callLink(),'_blank');
+};
+
+window.copyCallLink=function(){
+  if(!activeCall)return;
+  navigator.clipboard.writeText(callLink()).then(()=>toast('Link copied!')).catch(()=>toast('Copy failed'));
+};
+
 /* ===== MUSIC ===== */
 function fmt(sec){if(!sec||isNaN(sec))return '0:00';const m=Math.floor(sec/60);const s=Math.floor(sec%60);return `${m}:${String(s).padStart(2,'0')}`;}
 
@@ -1701,6 +2008,182 @@ window.createAccount=async function(){
   toast('Account created');renderMembers();renderGod();renderDmList();
 };
 window.toggleParty=async()=>{if(loggedInId!==GOD_ID)return;await set(ref(db,'partymode'),!partyOn);};
+
+/* ======================================================
+   MARKS & EXAM FILES
+====================================================== */
+let marksData={};
+window.renderMarks=function(){
+  const el=document.getElementById('marks-list');if(!el)return;
+  const entries=Object.entries(marksData).sort((a,b)=>b[1].ts-a[1].ts);
+  if(!entries.length){
+    el.innerHTML=`<div class="empty-state-box"><span class="empty-icon">📋</span><div class="empty-title">Coming Soon</div><div class="empty-desc">No marks or exam files have been uploaded yet.</div></div>`;
+    return;
+  }
+  el.innerHTML=entries.map(([key,m])=>{
+    const score=m.score!==undefined?m.score:null;
+    const total=m.total||100;
+    const pct=score!==null?Math.round((score/total)*100):null;
+    const grade=pct===null?'':(pct>=80?'A':pct>=65?'B':pct>=50?'C':'F');
+    const gradeCls=grade==='A'?'grade-a':grade==='B'?'grade-b':grade==='C'?'grade-c':grade==='F'?'grade-f':'';
+    const fileBtn=m.fileUrl?`<a class="mark-file-link" href="${m.fileUrl}" target="_blank">📎 View Exam File</a>`:'';
+    const delBtn=loggedInId===GOD_ID?`<button class="mark-del" onclick="deleteMark('${key}')">✕</button>`:'';
+    return `<div class="mark-card">${delBtn}
+      <div class="mark-subject">${esc(m.subject||'Untitled Exam')}</div>
+      ${score!==null?`<div class="mark-score">${score}<span>/${total}</span>${grade?`<span class="mark-grade ${gradeCls}">${grade}</span>`:''}</div>`:''}
+      <div class="mark-member">👤 ${esc(m.memberName||'All Members')}</div>
+      ${m.note?`<div style="font-size:0.72rem;color:var(--sub);margin-top:4px;font-style:italic;">${esc(m.note)}</div>`:''}
+      ${fileBtn}
+    </div>`;
+  }).join('');
+};
+window.deleteMark=async function(key){
+  await set(ref(db,'marks/'+key),null);toast('Deleted!');
+};
+window.addMark=async function(){
+  const subject=document.getElementById('mark-subject').value.trim();
+  const memberSel=document.getElementById('mark-member-sel').value;
+  const score=document.getElementById('mark-score').value.trim();
+  const total=document.getElementById('mark-total').value.trim()||'100';
+  const note=document.getElementById('mark-note').value.trim();
+  if(!subject){toast('Enter subject!');return;}
+  const memberName=memberSel==='all'?'All Members':((users[memberSel]||{}).name||'User #'+memberSel);
+  const entry={subject,memberId:memberSel,memberName,score:score!==''?Number(score):null,total:Number(total),note,fileUrl:'',ts:Date.now()};
+  /* check if file was uploaded */
+  const fileData=window._pendingMarkFile||null;
+  if(fileData)entry.fileUrl=fileData;
+  await set(push(ref(db,'marks')),entry);
+  ['mark-subject','mark-score','mark-total','mark-note'].forEach(id=>document.getElementById(id).value='');
+  window._pendingMarkFile=null;
+  document.getElementById('mark-file-name').textContent='No file chosen';
+  toast('Mark added!');
+};
+window.handleMarkFile=function(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{window._pendingMarkFile=ev.target.result;document.getElementById('mark-file-name').textContent=f.name;};
+  r.readAsDataURL(f);
+};
+
+/* ======================================================
+   RESULTS
+====================================================== */
+let resultsData={};
+window.renderResults=function(){
+  const el=document.getElementById('results-list');if(!el)return;
+  const entries=Object.entries(resultsData).sort((a,b)=>b[1].ts-a[1].ts);
+  if(!entries.length){
+    el.innerHTML=`<div class="empty-state-box"><span class="empty-icon">📊</span><div class="empty-title">Coming Soon</div><div class="empty-desc">No results have been published yet.</div></div>`;
+    return;
+  }
+  el.innerHTML=entries.map(([key,r])=>{
+    const delBtn=loggedInId===GOD_ID?`<button class="mark-del" onclick="deleteResult('${key}')">✕</button>`:'';
+    const fileBtn=r.fileUrl?`<a class="mark-file-link" href="${r.fileUrl}" target="_blank">📎 View Result File</a>`:'';
+    return `<div class="mark-card">${delBtn}
+      <div class="mark-subject">${esc(r.title||'Result')}</div>
+      <div class="mark-member" style="margin-bottom:6px;">📅 ${r.date||'—'}</div>
+      ${r.desc?`<div style="font-size:0.78rem;color:var(--sub);line-height:1.5;margin-bottom:6px;">${esc(r.desc)}</div>`:''}
+      ${fileBtn}
+    </div>`;
+  }).join('');
+};
+window.deleteResult=async function(key){await set(ref(db,'results/'+key),null);toast('Deleted!');};
+window.addResult=async function(){
+  const title=document.getElementById('result-title').value.trim();
+  const date=document.getElementById('result-date').value;
+  const desc=document.getElementById('result-desc').value.trim();
+  if(!title){toast('Enter title!');return;}
+  const fileData=window._pendingResultFile||null;
+  await set(push(ref(db,'results')),{title,date,desc,fileUrl:fileData||'',ts:Date.now()});
+  ['result-title','result-date','result-desc'].forEach(id=>document.getElementById(id).value='');
+  window._pendingResultFile=null;
+  document.getElementById('result-file-name').textContent='No file chosen';
+  toast('Result published!');
+};
+window.handleResultFile=function(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{window._pendingResultFile=ev.target.result;document.getElementById('result-file-name').textContent=f.name;};
+  r.readAsDataURL(f);
+};
+
+/* ======================================================
+   SPECIAL EVENTS CALENDAR
+====================================================== */
+let eventsData={};
+window.renderEvents=function(){
+  const el=document.getElementById('events-list');if(!el)return;
+  const entries=Object.entries(eventsData).sort((a,b)=>new Date(a[1].datetime)-new Date(b[1].datetime));
+  if(!entries.length){
+    el.innerHTML=`<div class="empty-state-box"><span class="empty-icon">📅</span><div class="empty-title">Coming Soon</div><div class="empty-desc">No special events have been scheduled yet.</div></div>`;
+    return;
+  }
+  const now=new Date();
+  el.innerHTML=entries.map(([key,ev])=>{
+    const dt=ev.datetime?new Date(ev.datetime):null;
+    const isToday=dt&&dt.toDateString()===now.toDateString();
+    const isPast=dt&&dt<now&&!isToday;
+    const diffMs=dt?dt-now:null;
+    const diffDays=diffMs?Math.ceil(diffMs/86400000):null;
+    const countdown=!isPast&&diffDays!==null?(diffDays===0?'Today! 🎉':diffDays===1?'Tomorrow!':'In '+diffDays+' days'):'';
+    const cls=isPast?'event-card past':isToday?'event-card today':'event-card';
+    const dateStr=dt?dt.toLocaleString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):'TBD';
+    const delBtn=loggedInId===GOD_ID?`<button class="mark-del" onclick="deleteEvent('${key}')">✕</button>`:'';
+    return `<div class="${cls}">${delBtn}
+      <div class="event-date-badge">📅 ${dateStr}</div>
+      <div class="event-title">${esc(ev.title||'Event')}</div>
+      ${ev.desc?`<div class="event-desc">${esc(ev.desc)}</div>`:''}
+      ${countdown?`<div class="event-countdown">⏰ ${countdown}</div>`:''}
+    </div>`;
+  }).join('');
+};
+window.deleteEvent=async function(key){await set(ref(db,'events/'+key),null);toast('Deleted!');};
+window.addEvent=async function(){
+  const title=document.getElementById('ev-title').value.trim();
+  const datetime=document.getElementById('ev-datetime').value;
+  const desc=document.getElementById('ev-desc').value.trim();
+  if(!title){toast('Enter event title!');return;}
+  await set(push(ref(db,'events')),{title,datetime,desc,ts:Date.now()});
+  ['ev-title','ev-datetime','ev-desc'].forEach(id=>document.getElementById(id).value='');
+  toast('Event created!');
+};
+
+/* ======================================================
+   EPC ANTHEM SONG LIST
+====================================================== */
+let anthemData={};
+window.renderAnthem=function(){
+  const el=document.getElementById('anthem-list');if(!el)return;
+  const entries=Object.entries(anthemData).sort((a,b)=>(a[1].order||99)-(b[1].order||99));
+  if(!entries.length){
+    el.innerHTML=`<div class="empty-state-box"><span class="empty-icon">🎵</span><div class="empty-title">Coming Soon</div><div class="empty-desc">The EPC anthem song list will be added soon. Check back later!</div></div>`;
+    return;
+  }
+  el.innerHTML=entries.map(([key,s],i)=>{
+    const delBtn=loggedInId===GOD_ID?`<button class="mark-del" onclick="deleteAnthem('${key}')">✕</button>`:'';
+    return `<div class="anthem-card">${delBtn}
+      <div class="anthem-num">${i+1}</div>
+      <div class="anthem-info">
+        <div class="anthem-title">${esc(s.title||'Untitled')}</div>
+        <div class="anthem-artist">${s.artist?'🎤 '+esc(s.artist):''}</div>
+        ${s.note?`<div class="anthem-note">${esc(s.note)}</div>`:''}
+      </div>
+      ${s.url?`<a href="${s.url}" target="_blank" style="font-size:0.72rem;color:var(--neon);text-decoration:none;">▶ Listen</a>`:''}
+    </div>`;
+  }).join('');
+};
+window.deleteAnthem=async function(key){await set(ref(db,'anthem/'+key),null);toast('Deleted!');};
+window.addAnthem=async function(){
+  const title=document.getElementById('anthem-title').value.trim();
+  const artist=document.getElementById('anthem-artist').value.trim();
+  const url=document.getElementById('anthem-url').value.trim();
+  const note=document.getElementById('anthem-note').value.trim();
+  if(!title){toast('Enter song title!');return;}
+  const order=Object.keys(anthemData).length+1;
+  await set(push(ref(db,'anthem')),{title,artist,url,note,order,ts:Date.now()});
+  ['anthem-title','anthem-artist','anthem-url','anthem-note'].forEach(id=>document.getElementById(id).value='');
+  toast('Song added!');
+};
 
 init();
 </script>
