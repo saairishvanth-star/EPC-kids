@@ -513,15 +513,17 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 
 #file-upload,#ann-photo-upload{display:none;}
 
-/* call notification popup */
-@keyframes slideInRight{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
-@keyframes ringPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
-#call-notif{position:fixed;top:16px;right:16px;z-index:99990;display:none;animation:slideInRight 0.4s cubic-bezier(0.34,1.56,0.64,1);}
-.call-notif-card{background:var(--panel);border:2px solid var(--accent);border-radius:14px;padding:14px 16px;max-width:300px;display:flex;gap:12px;align-items:center;box-shadow:0 0 30px var(--accent-glow);}
-.call-notif-icon{font-size:28px;animation:ringPulse 0.8s ease infinite;}
-.call-notif-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--accent);margin-bottom:3px;}
-.call-notif-msg{font-size:12px;color:var(--text-2);margin-bottom:8px;}
-.call-notif-btns{display:flex;gap:6px;}
+/* Call notification popup */
+@keyframes slideInR{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes ringAnim{0%,100%{transform:rotate(-15deg);}50%{transform:rotate(15deg);}}
+#call-notif-popup{position:fixed;top:16px;right:16px;z-index:99990;display:none;animation:slideInR 0.45s cubic-bezier(.34,1.56,.64,1);}
+.cnp-card{background:var(--panel);border:2px solid var(--accent);border-radius:14px;padding:14px 16px;max-width:290px;display:flex;gap:12px;align-items:flex-start;box-shadow:0 0 30px rgba(0,240,255,0.2);}
+.cnp-icon{font-size:26px;animation:ringAnim 0.7s ease infinite;}
+.cnp-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:var(--accent);margin-bottom:3px;text-shadow:0 0 6px var(--accent-glow);}
+.cnp-msg{font-size:11px;color:var(--text-2);margin-bottom:8px;line-height:1.4;}
+.cnp-btns{display:flex;gap:6px;}
+/* Live pulse badge */
+.live-pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent-glow);animation:blink 1s infinite;margin-left:auto;}
 </style>
 </head>
 <body>
@@ -539,10 +541,6 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
     </div>
     <div class="field"><label class="label">ID</label><input class="input" type="number" id="login-id" placeholder="Your member ID" onkeydown="if(event.key==='Enter')login()"/></div>
     <div class="field"><label class="label">Password</label><input class="input" type="password" id="login-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"/></div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-      <input type="checkbox" id="remember-me" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;"/>
-      <label for="remember-me" style="font-size:12px;color:var(--text-2);cursor:pointer;user-select:none;">Remember this device</label>
-    </div>
     <button class="btn btn-primary btn-block" onclick="login()">Sign in</button>
     <div class="err" id="login-err"></div>
   </div>
@@ -757,13 +755,13 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
         <div class="page-h"><div><div class="page-title">Voice <span class="serif accent">call</span></div><div class="page-sub">Live voice call for all members</div></div></div>
         <div id="call-idle" class="card" style="text-align:center;padding:40px 20px;">
           <div style="font-size:48px;margin-bottom:16px;">📞</div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;" id="call-idle-title">No active call</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px;" id="call-idle-title">No active call</div>
           <div style="font-size:13px;color:var(--text-2);margin-bottom:20px;" id="call-idle-sub">Waiting for a call to start…</div>
           <div id="call-idle-actions"></div>
         </div>
         <div id="call-lobby" class="card" style="display:none;text-align:center;padding:32px 20px;">
-          <div style="font-size:40px;margin-bottom:12px;animation:pulse 1s infinite;">📞</div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;">Call in progress!</div>
+          <div style="font-size:40px;margin-bottom:12px;">📞</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--accent);margin-bottom:6px;">Call in progress!</div>
           <div style="font-size:13px;color:var(--text-2);margin-bottom:20px;" id="call-lobby-sub"></div>
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
             <button class="btn btn-primary" onclick="joinCall()">📞 Join Call</button>
@@ -771,10 +769,8 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
           </div>
         </div>
         <div id="call-in" style="display:none;">
-          <div style="border-radius:var(--r-lg);overflow:hidden;margin-bottom:10px;">
-            <div id="jitsi-wrap" style="height:420px;"></div>
-          </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div style="border-radius:var(--r-lg);overflow:hidden;margin-bottom:10px;height:420px;" id="jitsi-wrap"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
             <button class="btn" onclick="leaveCall(false)">📴 Leave</button>
             <button class="btn btn-danger" id="call-end-btn-2" onclick="endCall()" style="display:none;">End for all</button>
           </div>
@@ -832,13 +828,18 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
           <button class="btn btn-sm" style="margin-top:10px;" onclick="addRankSlot()">+ Add another rank</button>
         </div>
 
-        <div class="card" style="border-color:rgba(230,200,105,0.25);"><div class="card-title" style="color:var(--gold);">⚡ God Mode Access</div><div class="card-sub" style="margin-bottom:10px;">Grant or revoke God Mode for any member</div><div id="god-grants"></div></div>
-        <div class="card"><div class="card-title">📝 Edit Any Profile</div><div class="card-sub" style="margin-bottom:10px;">Edit any member's profile directly</div>
-          <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
-            <select class="input god-input" id="edit-profile-sel" onchange="loadEditProfile()" style="width:160px;flex:none;">
-              <option value="">-- Select member --</option>
-            </select>
-          </div>
+        <div class="card" style="border-color:rgba(230,200,105,0.3);">
+          <div class="card-title" style="color:var(--gold);">⚡ God Mode Access</div>
+          <div class="card-sub" style="margin-bottom:12px;">Grant or revoke God Mode for any member</div>
+          <div id="god-grants"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📝 Edit Any Profile</div>
+          <div class="card-sub" style="margin-bottom:12px;">Edit any member's details directly</div>
+          <select class="input" id="edit-profile-sel" onchange="loadEditProfile()" style="margin-bottom:10px;">
+            <option value="">-- Select member --</option>
+          </select>
           <div id="edit-profile-form" style="display:none;">
             <div class="field"><label class="label">Name</label><input class="input" type="text" id="ep-name"/></div>
             <div class="field"><label class="label">Role</label><input class="input" type="text" id="ep-role"/></div>
@@ -846,9 +847,10 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
             <div class="field"><label class="label">Skills (comma separated)</label><input class="input" type="text" id="ep-skills"/></div>
             <div class="field"><label class="label">Email</label><input class="input" type="email" id="ep-email"/></div>
             <div class="field"><label class="label">Location</label><input class="input" type="text" id="ep-location"/></div>
-            <button class="btn btn-primary" onclick="saveEditProfile()">Save Profile</button>
+            <button class="btn btn-primary" onclick="saveEditProfile()" style="margin-top:4px;">Save Profile</button>
           </div>
         </div>
+
         <div class="card"><div class="card-title">🔑 Passwords</div><div id="god-pw" style="margin-top:12px;"></div></div>
         <div class="card"><div class="card-title">✏️ Usernames</div><div id="god-un" style="margin-top:12px;"></div></div>
         <div class="card"><div class="card-title">🔢 Member IDs</div><div id="god-id" style="margin-top:12px;"></div></div>
@@ -978,8 +980,7 @@ window.toggleSidebar=()=>{document.getElementById('sidebar').classList.toggle('s
 window.closeSidebar=()=>{document.getElementById('sidebar').classList.remove('show');document.getElementById('sb-overlay').classList.remove('show');};
 
 /* ===== INIT ===== */
-let activeCall=null,callJoined=false,prevCallState=null,_callTimer=null;
-let allIds=()=>Object.keys(passwords).map(Number);
+let activeCall=null,callJoined=false,prevCallState=null,_callNotifTimer=null;
 
 window.renderCall=function(){
   const idle=document.getElementById('call-idle');
@@ -993,10 +994,9 @@ window.renderCall=function(){
     const actions=document.getElementById('call-idle-actions');
     if(isGod()){
       sub.textContent='Start a voice call that all members can join.';
-      actions.innerHTML=`<button class="btn btn-primary" onclick="startCall()">📞 Start Call</button>`;
+      actions.innerHTML='<button class="btn btn-primary" onclick="startCall()">📞 Start Call</button>';
     }else{
-      sub.textContent='Waiting for the manager to start a call…';
-      actions.innerHTML='';
+      sub.textContent='Waiting for the manager to start a call…';actions.innerHTML='';
     }
     if(callJoined){callJoined=false;const w=document.getElementById('jitsi-wrap');if(w)w.innerHTML='';}
     return;
@@ -1014,19 +1014,19 @@ window.renderCall=function(){
 window.startCall=async function(){
   if(!isGod())return;
   const u=users[loggedInId]||{name:'Manager'};
-  const room='epc-kids-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
+  const room='epc-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
   await set(ref(db,'activeCall'),{room,startedBy:loggedInId,startedByName:u.name,ts:Date.now()});
-  /* notify all other members */
+  /* notify all other members via Firebase notifications */
   allIds().filter(id=>id!==loggedInId).forEach(async id=>{
     await set(push(ref(db,'notifications/'+id)),{icon:'📞',msg:(u.name||'Manager')+' started a call! Join now.',ts:Date.now(),read:false});
   });
   toast('Call started! Members notified.');
-  setTimeout(()=>joinCall(),300);
+  setTimeout(()=>joinCall(),400);
 };
 
 window.endCall=async function(){
   if(!isGod())return;
-  if(!confirm('End the call for everyone?'))return;
+  if(!confirm('End call for everyone?'))return;
   await set(ref(db,'activeCall'),null);
   leaveCall(true);toast('Call ended');
 };
@@ -1037,8 +1037,7 @@ window.joinCall=function(){
   const wrap=document.getElementById('jitsi-wrap');
   const u=users[loggedInId]||{name:'Member'};
   const name=encodeURIComponent(u.name||'Member');
-  const cfg='#config.startWithVideoMuted=true&config.prejoinPageEnabled=false&config.disableDeepLinking=true&userInfo.displayName='+name;
-  wrap.innerHTML=`<iframe style="width:100%;height:100%;border:none;" allow="camera;microphone;autoplay;display-capture;fullscreen" src="https://meet.jit.si/${activeCall.room}${cfg}"></iframe>`;
+  wrap.innerHTML='<iframe style="width:100%;height:100%;border:none;" allow="camera;microphone;autoplay;display-capture;fullscreen" src="https://meet.jit.si/'+activeCall.room+'#config.startWithVideoMuted=true&config.prejoinPageEnabled=false&config.disableDeepLinking=true&userInfo.displayName='+name+'"></iframe>';
   renderCall();
 };
 
@@ -1049,13 +1048,10 @@ window.leaveCall=function(silent){
   renderCall();
 };
 
-window.joinFromNotif=function(){
-  dismissCallNotif();go('call');
-  setTimeout(()=>joinCall(),300);
-};
+window.joinFromNotif=function(){dismissCallNotif();go('call');setTimeout(()=>joinCall(),300);};
 window.dismissCallNotif=function(){
-  const el=document.getElementById('call-notif');if(el)el.style.display='none';
-  if(_callTimer){clearTimeout(_callTimer);_callTimer=null;}
+  const el=document.getElementById('call-notif-popup');if(el)el.style.display='none';
+  if(_callNotifTimer){clearTimeout(_callNotifTimer);_callNotifTimer=null;}
 };
 
 async function init(){
@@ -1080,8 +1076,8 @@ async function init(){
   onValue(ref(db,'godGrants'),s=>{
     godGrants=s.exists()?s.val():{};
     if(loggedInId){
-      const navGod=document.getElementById('nav-god');
-      if(navGod)navGod.style.display=isGod()?'':'none';
+      const ng=document.getElementById('nav-god');
+      if(ng)ng.style.display=isGod()?'':'none';
     }
   });
   onValue(ref(db,'users'),s=>{if(s.exists()){users=s.val();if(loggedInId){renderMembers();renderProfile();updateSidebarUser();if(document.getElementById('page-god').style.display!=='none')renderGod();if(document.getElementById('page-leaderboard').style.display!=='none')renderLeaderboard();}}});
@@ -1115,72 +1111,31 @@ async function init(){
   onValue(ref(db,'activeCall'),s=>{
     activeCall=s.exists()&&s.val()&&s.val().room?s.val():null;
     if(!activeCall&&callJoined)leaveCall(true);
-    /* sidebar pulse badge */
+    /* sidebar live badge */
     const navCall=document.getElementById('nav-call');
     if(navCall){
       const ex=navCall.querySelector('.live-pulse');
-      if(activeCall&&!ex){const p=document.createElement('span');p.className='live-pulse';p.style.marginLeft='auto';navCall.appendChild(p);}
+      if(activeCall&&!ex){const p=document.createElement('span');p.className='live-pulse';navCall.appendChild(p);}
       else if(!activeCall&&ex)ex.remove();
     }
-    /* show popup to non-starter when call begins */
+    /* show popup to non-callers when call starts */
     if(activeCall&&!prevCallState&&loggedInId&&loggedInId!==activeCall.startedBy){
-      const el=document.getElementById('call-notif');
-      const msg=document.getElementById('call-notif-msg');
-      if(el&&msg){
+      const popup=document.getElementById('call-notif-popup');
+      const msg=document.getElementById('cnp-msg');
+      if(popup&&msg){
         msg.textContent=(activeCall.startedByName||'Someone')+' started a call — join now!';
-        el.style.display='block';
-        if(_callTimer)clearTimeout(_callTimer);
-        _callTimer=setTimeout(()=>dismissCallNotif(),30000);
+        popup.style.display='block';
+        if(_callNotifTimer)clearTimeout(_callNotifTimer);
+        _callNotifTimer=setTimeout(()=>dismissCallNotif(),30000);
       }
     }
-    /* notify when call ends */
-    if(!activeCall&&prevCallState&&loggedInId&&loggedInId!==prevCallState.startedBy){
-      dismissCallNotif();
-    }
+    if(!activeCall&&prevCallState)dismissCallNotif();
     prevCallState=activeCall?{...activeCall}:null;
     if(loggedInId&&document.getElementById('page-call').style.display!=='none')renderCall();
   });
 
   document.getElementById('loading').style.display='none';
-
-  /* auto-login if device is remembered */
-  try{
-    const savedId=localStorage.getItem('epc_saved_id');
-    const savedPw=localStorage.getItem('epc_saved_pw');
-    if(savedId&&savedPw){
-      /* show a quick "logging in..." state */
-      document.getElementById('loading').style.display='flex';
-      /* attempt auto login */
-      const id=parseInt(savedId);
-      if(passwords[id]&&String(passwords[id])===savedPw){
-        const banSnap=await get(ref(db,'bans/'+id));
-        const isBanned=banSnap.exists()?banSnap.val():(users[id]&&users[id].banned);
-        if(!isBanned||id===GOD_ID){
-          /* success - log in silently */
-          loggedInId=id;viewingId=id;editMode=false;
-          document.getElementById('loading').style.display='none';
-          document.getElementById('login').style.display='none';
-          document.getElementById('app').style.display='block';
-          if(isGod(id))document.getElementById('nav-god').style.display='';
-          updateSidebarUser();
-          const annSnap=await get(ref(db,'announcement'));
-          if(annSnap.exists()&&annSnap.val()&&annSnap.val().msg)showAnnPopup(annSnap.val());
-          onValue(ref(db,'warnings/'+id),s=>{if(s.exists()&&s.val()){document.getElementById('warn-text').textContent=s.val();document.getElementById('warn-modal').classList.add('show');}});
-          renderMembers();renderProfile();renderDmList();renderAnnBoard();
-          return;
-        }
-      }
-      /* saved credentials no longer valid - clear and show login */
-      localStorage.removeItem('epc_saved_id');
-      localStorage.removeItem('epc_saved_pw');
-      document.getElementById('loading').style.display='none';
-      document.getElementById('login').style.display='flex';
-    } else {
-      document.getElementById('login').style.display='flex';
-    }
-  }catch(e){
-    document.getElementById('login').style.display='flex';
-  }
+  document.getElementById('login').style.display='flex';
 }
 
 /* ===== LOGIN ===== */
@@ -1194,20 +1149,9 @@ window.login=async function(){
   const isBanned=banSnap.exists()?banSnap.val():(users[id]&&users[id].banned);
   if(isBanned&&id!==GOD_ID){document.getElementById('ban-modal').classList.add('show');return;}
   loggedInId=id;viewingId=id;editMode=false;
-  /* save to localStorage if remember me checked */
-  try{
-    const rememberEl=document.getElementById('remember-me');
-    if(rememberEl&&rememberEl.checked){
-      localStorage.setItem('epc_saved_id',String(id));
-      localStorage.setItem('epc_saved_pw',pw);
-    } else {
-      localStorage.removeItem('epc_saved_id');
-      localStorage.removeItem('epc_saved_pw');
-    }
-  }catch(e){}
   document.getElementById('login').style.display='none';
   document.getElementById('app').style.display='block';
-  if(id===GOD_ID)document.getElementById('nav-god').style.display='';
+  if(isGod(id))document.getElementById('nav-god').style.display='';
   updateSidebarUser();
   const annSnap=await get(ref(db,'announcement'));
   if(annSnap.exists()&&annSnap.val()&&annSnap.val().msg)showAnnPopup(annSnap.val());
@@ -1217,7 +1161,6 @@ window.login=async function(){
 
 window.logout=function(){
   loggedInId=null;viewingId=null;editMode=false;dmWithId=null;
-  try{localStorage.removeItem('epc_saved_id');localStorage.removeItem('epc_saved_pw');}catch(e){}
   if(audioEl){audioEl.pause();audioEl=null;}currentSongIdx=-1;
   if(dmUnsub){dmUnsub();dmUnsub=null;}
   document.getElementById('login-id').value='';document.getElementById('login-pw').value='';document.getElementById('login-err').textContent='';
@@ -1247,13 +1190,13 @@ window.go=function(tab){
   });
   if(tab==='chat')scrollChat();
   if(tab==='god')renderGod();
-  if(tab==='call')renderCall();
   if(tab==='dms')renderDmList();
   if(tab==='announcements')renderAnnBoard();
   if(tab==='calendar'){renderCalendar();renderCalDetail();}
   if(tab==='voting')renderVoting();
   if(tab==='leaderboard')renderLeaderboard();
   if(tab==='music')renderMusic();
+  if(tab==='call')renderCall();
   closeSidebar();
 };
 
@@ -1873,13 +1816,11 @@ window.deleteSong=async function(id){
 /* ===== GOD MODE ===== */
 window.toggleGodGrant=async function(id){
   if(loggedInId!==GOD_ID){toast('Only Saai can grant God Mode!');return;}
-  const current=godGrants[id]===true;
-  await set(ref(db,'godGrants/'+id),!current);
+  const had=godGrants[id]===true;
+  await set(ref(db,'godGrants/'+id),!had);
   const u=users[id]||{name:'User #'+id};
-  toast(current?u.name+': God Mode revoked':u.name+': God Mode granted!');
-  if(!current){
-    await set(push(ref(db,'notifications/'+id)),{icon:'⚡',msg:'You have been granted God Mode by Saairishvanth!',ts:Date.now(),read:false});
-  }
+  toast(had?u.name+': God Mode revoked':u.name+': God Mode granted!');
+  if(!had)await set(push(ref(db,'notifications/'+id)),{icon:'⚡',msg:'Saairishvanth granted you God Mode!',ts:Date.now(),read:false});
 };
 
 window.loadEditProfile=function(){
@@ -1898,9 +1839,8 @@ window.loadEditProfile=function(){
 };
 
 window.saveEditProfile=async function(){
-  const sel=document.getElementById('edit-profile-sel');
-  const id=parseInt(sel.value);
-  if(!id||!users[id]){toast('Select a member first!');return;}
+  const id=parseInt(document.getElementById('edit-profile-sel').value);
+  if(!id||!users[id]){toast('Select a member!');return;}
   const u=users[id];
   u.name=document.getElementById('ep-name').value.trim()||u.name;
   u.role=document.getElementById('ep-role').value.trim()||u.role;
@@ -1921,7 +1861,7 @@ function renderGod(){
   if(ggEl)ggEl.innerHTML=ids.filter(id=>id!==GOD_ID).map(id=>{
     const u=users[id]||{name:'User #'+id};
     const granted=godGrants[id]===true;
-    return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><span class="tag ${granted?'success':'default'}" style="font-size:11px;">${granted?'⚡ God Mode':'Normal'}</span><button class="btn btn-sm ${granted?'btn-danger':'btn-warn'}" onclick="toggleGodGrant(${id})">${granted?'Revoke':'Grant God'}</button></div>`;
+    return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><span class="tag ${granted?'success':'default'}">${granted?'⚡ God Mode':'Normal'}</span><button class="btn btn-sm ${granted?'btn-danger':'btn-warn'}" onclick="toggleGodGrant(${id})">${granted?'Revoke':'Grant God'}</button></div>`;
   }).join('');
   /* edit profile selector */
   const epSel=document.getElementById('edit-profile-sel');
@@ -1931,8 +1871,7 @@ function renderGod(){
       const u=users[id]||{name:'User #'+id};
       return `<option value="${id}">${esc(u.name)}</option>`;
     }).join('');
-    epSel.value=prev;
-    if(prev)loadEditProfile();
+    epSel.value=prev;if(prev)loadEditProfile();
   }
   document.getElementById('god-pw').innerHTML=ids.map(id=>{const u=users[id]||{name:'User #'+id};return `<div class="god-row"><span class="god-name">${esc(u.name)} <span class="god-id">#${id}</span></span><input class="input god-input" type="text" id="gpw-${id}" placeholder="New password"/><button class="btn btn-sm btn-primary" onclick="changePw(${id})">Set</button></div>`;}).join('');
   document.getElementById('god-un').innerHTML=ids.map(id=>{const u=users[id]||{name:'User #'+id};return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><input class="input god-input" type="text" id="gun-${id}" placeholder="New name"/><button class="btn btn-sm btn-primary" onclick="changeUn(${id})">Set</button></div>`;}).join('');
@@ -1996,15 +1935,15 @@ window.toggleParty=async()=>{if(loggedInId!==GOD_ID)return;await set(ref(db,'par
 init();
 </script>
 
-<div id="call-notif">
-  <div class="call-notif-card">
-    <div class="call-notif-icon">📞</div>
+<div id="call-notif-popup">
+  <div class="cnp-card">
+    <div class="cnp-icon">📞</div>
     <div>
-      <div class="call-notif-title">Call Started!</div>
-      <div class="call-notif-msg" id="call-notif-msg">Someone started a call</div>
-      <div class="call-notif-btns">
-        <button class="btn btn-primary btn-sm" style="padding:5px 12px;font-size:11px;" onclick="joinFromNotif()">Join</button>
-        <button class="btn btn-sm" style="padding:5px 12px;font-size:11px;" onclick="dismissCallNotif()">Dismiss</button>
+      <div class="cnp-title">Call Started!</div>
+      <div class="cnp-msg" id="cnp-msg">Someone started a call</div>
+      <div class="cnp-btns">
+        <button class="btn btn-primary" style="padding:5px 12px;font-size:11px;" onclick="joinFromNotif()">Join</button>
+        <button class="btn" style="padding:5px 12px;font-size:11px;" onclick="dismissCallNotif()">Dismiss</button>
       </div>
     </div>
   </div>
