@@ -604,35 +604,6 @@ body.party-on #disco-ball-el{display:flex;}
 .star:hover{transform:scale(1.3);}
 .rating-avg{font-size:.62rem;color:var(--gold);margin-left:5px;font-family:'Orbitron',sans-serif;}
 .member-rating{font-size:.68rem;color:var(--gold);margin-top:2px;}
-/* ── Criminal Records ── */
-.crime-person-block{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);margin-bottom:18px;overflow:hidden;}
-.crime-person-header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--panel-2);}
-.crime-person-name{font-weight:700;font-size:15px;}
-.crime-person-role{font-size:12px;color:var(--text-2);}
-.crime-count{margin-left:auto;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#ff000022;color:#ff4444;border:1px solid #ff444433;}
-.crime-count.clean{background:#00ff8822;color:#00cc66;border-color:#00ff8833;}
-.crime-entries{padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
-.crime-entry{background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;position:relative;}
-.crime-entry-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
-.crime-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;font-family:'Orbitron',sans-serif;}
-.crime-badge.minor{background:#ffff0022;color:#cccc00;border:1px solid #cccc0044;}
-.crime-badge.moderate{background:#ff880022;color:#ff8800;border:1px solid #ff880044;}
-.crime-badge.serious{background:#ff330022;color:#ff3300;border:1px solid #ff330044;}
-.crime-badge.capital{background:#44000099;color:#ff0000;border:1px solid #ff0000aa;animation:crimeFlash 1.5s ease-in-out infinite;}
-@keyframes crimeFlash{0%,100%{box-shadow:0 0 0px #ff0000;}50%{box-shadow:0 0 10px #ff000088;}}
-.crime-offence{font-size:14px;font-weight:600;color:var(--text-1);}
-.crime-notes{font-size:12px;color:var(--text-2);margin-top:3px;}
-.crime-meta{font-size:11px;color:var(--text-3);margin-top:5px;}
-.crime-delete{position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;font-size:14px;color:var(--text-3);opacity:0.5;}
-.crime-delete:hover{opacity:1;color:#ff4444;}
-.crime-clean-msg{text-align:center;padding:14px;font-size:13px;color:var(--text-3);}
-.crime-statement-section{padding:10px 16px 14px;border-top:1px solid var(--line);background:var(--panel-2);}
-.crime-statement-label{font-size:11px;font-family:'Orbitron',sans-serif;color:var(--text-3);margin-bottom:6px;letter-spacing:.05em;}
-.crime-statement-text{font-size:13px;color:var(--text-2);line-height:1.6;white-space:pre-wrap;font-style:italic;}
-.crime-statement-text.empty{color:var(--text-3);font-style:normal;}
-.crime-statement-edit{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-1);padding:8px 10px;font-size:13px;line-height:1.6;resize:vertical;min-height:70px;font-family:inherit;}
-.crime-statement-edit:focus{outline:none;border-color:var(--accent);}
-.crime-stmt-btns{display:flex;gap:8px;margin-top:6px;}
 </style>
 </head>
 <body>
@@ -694,7 +665,6 @@ body.party-on #disco-ball-el{display:flex;}
 
         <button class="sb-item" id="nav-call" onclick="go('call')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.08 6.08l1.09-.91a2 2 0 0 1 2.11-.45c.91.33 1.85.56 2.81.69A2 2 0 0 1 22 16.92z"/></svg>Voice Call</button>
         <button class="sb-item god-only" id="nav-god" onclick="go('god')" style="display:none;"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>God Mode</button>
-        <button class="sb-item" id="nav-crimes" onclick="go('crimes')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Criminal Records</button>
       </nav>
 
       <div class="sb-foot">
@@ -893,33 +863,6 @@ body.party-on #disco-ball-el{display:flex;}
             <button class="btn btn-danger" id="call-end-btn-2" onclick="endCall()" style="display:none;">End for all</button>
           </div>
         </div>
-      </div>
-
-      <div class="page" id="page-crimes" style="display:none;">
-        <div class="page-h">
-          <div>
-            <div class="page-title">🚔 Criminal <span class="serif accent">Records</span></div>
-            <div class="page-sub">Official EPC Kids offence log</div>
-          </div>
-        </div>
-        <!-- God only: file a charge -->
-        <div class="card" id="add-crime-card" style="display:none;">
-          <div class="card-h"><div><div class="card-title">➕ File a Charge</div></div></div>
-          <div class="field"><label class="label">Suspect</label><select class="input" id="crime-suspect"></select></div>
-          <div class="field"><label class="label">Offence</label><input class="input" id="crime-offence" placeholder="e.g. Stealing snacks, Being too loud…"/></div>
-          <div class="field"><label class="label">Severity</label>
-            <select class="input" id="crime-severity">
-              <option value="minor">⚠️ Minor</option>
-              <option value="moderate">🔶 Moderate</option>
-              <option value="serious">🔴 Serious</option>
-              <option value="capital">💀 Capital</option>
-            </select>
-          </div>
-          <div class="field"><label class="label">Evidence / Notes (optional)</label><textarea class="input" id="crime-notes" placeholder="Any extra details…" rows="2"></textarea></div>
-          <button class="btn btn-primary" onclick="fileCrime()" style="margin-top:4px;">🔒 File Charge</button>
-        </div>
-        <!-- Per-person records -->
-        <div id="crimes-list"></div>
       </div>
 
       <div class="page" id="page-god" style="display:none;">
@@ -1516,7 +1459,7 @@ function updateSidebarUser(){
 
 /* ===== NAV ===== */
 window.go=function(tab){
-  ['profiles','dms','chat','announcements','calendar','voting','leaderboard','complaints','music','call','god','crimes'].forEach(t=>{
+  ['profiles','dms','chat','announcements','calendar','voting','leaderboard','complaints','music','call','god'].forEach(t=>{
     const p=document.getElementById('page-'+t);if(p)p.style.display=t===tab?'block':'none';
     const n=document.getElementById('nav-'+t);if(n)n.classList.toggle('active',t===tab);
   });
@@ -1529,7 +1472,6 @@ window.go=function(tab){
   if(tab==='leaderboard')renderLeaderboard();
   if(tab==='music')renderMusic();
   if(tab==='call')renderCall();
-  if(tab==='crimes')renderCrimes();
   closeSidebar();
 };
 
@@ -2061,4 +2003,484 @@ window.renderMusic=function(){
   if(!songs.length){list.innerHTML='<div class="empty">No songs uploaded yet.</div>';document.getElementById('np-card').style.display='none';return;}
   list.innerHTML=songs.map((s,i)=>{
     const isPlaying=i===currentSongIdx;
-    const delBtn=loggedInId===GOD_ID?`<button class="song-icon-btn danger" on
+    const delBtn=loggedInId===GOD_ID?`<button class="song-icon-btn danger" onclick="event.stopPropagation();deleteSong('${s.id}')" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg></button>`:'';
+    return `<div class="song-row ${isPlaying?'playing':''}" onclick="playSongAt(${i})">
+      <div class="song-num">${isPlaying?'▶':String(i+1).padStart(2,'0')}</div>
+      <div class="song-info"><div class="song-title">${esc(s.title)}</div><div class="song-artist">${esc(s.artist||'Unknown artist')}</div></div>
+      <div class="song-actions">${delBtn}</div>
+    </div>`;
+  }).join('');
+  /* update now playing display if song exists */
+  if(currentSongIdx>=0&&currentSongIdx<songs.length){
+    document.getElementById('np-card').style.display='block';
+    const s=songs[currentSongIdx];
+    document.getElementById('np-title').textContent=s.title;
+    document.getElementById('np-artist').textContent=s.artist||'Unknown artist';
+  }
+};
+
+window.playSongAt=function(idx){
+  if(idx<0||idx>=songs.length)return;
+  if(!audioEl){audioEl=new Audio();audioEl.addEventListener('timeupdate',onAudioProgress);audioEl.addEventListener('ended',musicNext);audioEl.addEventListener('loadedmetadata',()=>document.getElementById('np-dur').textContent=fmt(audioEl.duration));}
+  currentSongIdx=idx;
+  const s=songs[idx];
+  audioEl.src=s.data;
+  audioEl.play().catch(e=>{console.error('play failed:',e);toast('Playback failed');});
+  document.getElementById('np-card').style.display='block';
+  document.getElementById('np-title').textContent=s.title;
+  document.getElementById('np-artist').textContent=s.artist||'Unknown artist';
+  document.getElementById('np-art').classList.add('playing');
+  setPlayIcon(true);
+  renderMusic();
+};
+
+function onAudioProgress(){
+  if(!audioEl)return;
+  const pct=audioEl.duration?(audioEl.currentTime/audioEl.duration)*100:0;
+  document.getElementById('np-bar-fill').style.width=pct+'%';
+  document.getElementById('np-cur').textContent=fmt(audioEl.currentTime);
+}
+
+function setPlayIcon(playing){
+  const icon=document.getElementById('np-play-icon');
+  if(!icon)return;
+  icon.innerHTML=playing?'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>':'<path d="M8 5v14l11-7z"/>';
+}
+
+window.musicTogglePlay=function(){
+  if(!audioEl||currentSongIdx<0){if(songs.length)playSongAt(0);return;}
+  if(audioEl.paused){audioEl.play();setPlayIcon(true);document.getElementById('np-art').classList.add('playing');}
+  else{audioEl.pause();setPlayIcon(false);document.getElementById('np-art').classList.remove('playing');}
+};
+window.musicNext=function(){if(!songs.length)return;const next=(currentSongIdx+1)%songs.length;playSongAt(next);};
+window.musicPrev=function(){if(!songs.length)return;if(audioEl&&audioEl.currentTime>3){audioEl.currentTime=0;return;}const prev=currentSongIdx<=0?songs.length-1:currentSongIdx-1;playSongAt(prev);};
+
+/* seek */
+document.addEventListener('click',e=>{
+  if(e.target.closest&&e.target.closest('#np-bar')&&audioEl&&audioEl.duration){
+    const bar=document.getElementById('np-bar');
+    const rect=bar.getBoundingClientRect();
+    const pct=(e.clientX-rect.left)/rect.width;
+    audioEl.currentTime=audioEl.duration*Math.max(0,Math.min(1,pct));
+  }
+});
+
+/* GOD: upload */
+window.handleSongFile=function(e){
+  const f=e.target.files[0];if(!f)return;
+  const err=document.getElementById('song-err');err.textContent='';
+  /* size check: base64 adds ~33% — Firebase item limit ~5MB, we'll say ~3.5MB raw */
+  if(f.size>3.7*1024*1024){
+    err.textContent=`File is ${(f.size/1024/1024).toFixed(1)} MB — needs to be under 3.5 MB`;
+    songFileData=null;songFileName='';document.getElementById('song-upload-btn').disabled=true;
+    document.getElementById('song-upload-text').textContent='Click to select an audio file';
+    return;
+  }
+  songFileName=f.name;
+  document.getElementById('song-upload-text').textContent=`📎 ${f.name} (${(f.size/1024/1024).toFixed(1)} MB)`;
+  /* auto-fill title if empty */
+  const titleInput=document.getElementById('song-title-input');
+  if(!titleInput.value.trim())titleInput.value=f.name.replace(/\.[^.]+$/,'');
+  const r=new FileReader();
+  r.onload=ev=>{songFileData=ev.target.result;document.getElementById('song-upload-btn').disabled=false;};
+  r.readAsDataURL(f);
+};
+
+window.uploadSong=async function(){
+  if(loggedInId!==GOD_ID)return;
+  const title=document.getElementById('song-title-input').value.trim();
+  const artist=document.getElementById('song-artist-input').value.trim();
+  const err=document.getElementById('song-err');err.textContent='';
+  if(!title){err.textContent='Enter a title';return;}
+  if(!songFileData){err.textContent='Pick a file first';return;}
+  const btn=document.getElementById('song-upload-btn');btn.disabled=true;btn.textContent='Uploading…';
+  const progress=document.getElementById('song-progress');progress.classList.add('show');
+  document.getElementById('song-progress-bar').style.width='50%';
+  try{
+    await push(ref(db,'songs'),{title,artist,data:songFileData,ts:Date.now()});
+    document.getElementById('song-progress-bar').style.width='100%';
+    toast('Song uploaded!');
+    setTimeout(()=>{progress.classList.remove('show');document.getElementById('song-progress-bar').style.width='0%';},800);
+    /* reset form */
+    document.getElementById('song-title-input').value='';
+    document.getElementById('song-artist-input').value='';
+    document.getElementById('song-upload-text').textContent='Click to select an audio file';
+    songFileData=null;songFileName='';
+  }catch(e){
+    console.error(e);
+    err.textContent='Upload failed — file may be too large';
+    progress.classList.remove('show');document.getElementById('song-progress-bar').style.width='0%';
+  }
+  btn.textContent='Upload song';btn.disabled=false;
+};
+
+window.deleteSong=async function(id){
+  if(loggedInId!==GOD_ID)return;
+  if(!confirm('Delete this song?'))return;
+  const idx=songs.findIndex(s=>s.id===id);
+  await set(ref(db,'songs/'+id),null);
+  if(idx===currentSongIdx){if(audioEl)audioEl.pause();currentSongIdx=-1;document.getElementById('np-card').style.display='none';}
+  else if(idx<currentSongIdx)currentSongIdx--;
+  toast('Deleted');
+};
+
+/* ===== GOD MODE ===== */
+window.toggleGodGrant=async function(id){
+  if(loggedInId!==GOD_ID){toast('Only Saai can grant God Mode!');return;}
+  const had=godGrants[id]===true;
+  await set(ref(db,'godGrants/'+id),!had);
+  const u=users[id]||{name:'User #'+id};
+  toast(had?u.name+': God Mode revoked':u.name+': God Mode granted!');
+  if(!had)await set(push(ref(db,'notifications/'+id)),{icon:'⚡',msg:'Saairishvanth granted you God Mode!',ts:Date.now(),read:false});
+};
+
+window.loadEditProfile=function(){
+  const sel=document.getElementById('edit-profile-sel');
+  const form=document.getElementById('edit-profile-form');
+  const id=parseInt(sel.value);
+  if(!id||!users[id]){if(form)form.style.display='none';return;}
+  const u=users[id];
+  if(form)form.style.display='block';
+  document.getElementById('ep-name').value=u.name||'';
+  document.getElementById('ep-role').value=u.role||'';
+  document.getElementById('ep-about').value=u.about||'';
+  document.getElementById('ep-skills').value=(u.skills||[]).join(', ');
+  document.getElementById('ep-email').value=u.email||'';
+  document.getElementById('ep-location').value=u.location||'';
+};
+
+window.saveEditProfile=async function(){
+  const id=parseInt(document.getElementById('edit-profile-sel').value);
+  if(!id||!users[id]){toast('Select a member!');return;}
+  const u=users[id];
+  u.name=document.getElementById('ep-name').value.trim()||u.name;
+  u.role=document.getElementById('ep-role').value.trim()||u.role;
+  u.about=document.getElementById('ep-about').value.trim();
+  u.email=document.getElementById('ep-email').value.trim();
+  u.location=document.getElementById('ep-location').value.trim();
+  u.skills=document.getElementById('ep-skills').value.split(',').map(s=>s.trim()).filter(Boolean);
+  u.initials=(u.name||'?')[0].toUpperCase();
+  await saveUser(id);
+  renderMembers();renderProfile();
+  toast('Profile updated for '+u.name+'!');
+};
+
+function renderGod(){
+  const ids=allIds();
+  /* god grants */
+  const ggEl=document.getElementById('god-grants');
+  if(ggEl)ggEl.innerHTML=ids.filter(id=>id!==GOD_ID).map(id=>{
+    const u=users[id]||{name:'User #'+id};
+    const granted=godGrants[id]===true;
+    return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><span class="tag ${granted?'success':'default'}">${granted?'⚡ God Mode':'Normal'}</span><button class="btn btn-sm ${granted?'btn-danger':'btn-warn'}" onclick="toggleGodGrant(${id})">${granted?'Revoke':'Grant God'}</button></div>`;
+  }).join('');
+  /* edit profile selector */
+  const epSel=document.getElementById('edit-profile-sel');
+  if(epSel){
+    const prev=epSel.value;
+    epSel.innerHTML='<option value="">-- Select member --</option>'+ids.map(id=>{
+      const u=users[id]||{name:'User #'+id};
+      return `<option value="${id}">${esc(u.name)}</option>`;
+    }).join('');
+    epSel.value=prev;if(prev)loadEditProfile();
+  }
+  document.getElementById('god-pw').innerHTML=ids.map(id=>{const u=users[id]||{name:'User #'+id};return `<div class="god-row"><span class="god-name">${esc(u.name)} <span class="god-id">#${id}</span></span><input class="input god-input" type="text" id="gpw-${id}" placeholder="New password"/><button class="btn btn-sm btn-primary" onclick="changePw(${id})">Set</button></div>`;}).join('');
+  document.getElementById('god-un').innerHTML=ids.map(id=>{const u=users[id]||{name:'User #'+id};return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><input class="input god-input" type="text" id="gun-${id}" placeholder="New name"/><button class="btn btn-sm btn-primary" onclick="changeUn(${id})">Set</button></div>`;}).join('');
+  document.getElementById('god-id').innerHTML=ids.map(id=>{const u=users[id]||{name:'User #'+id};return `<div class="god-row"><span class="god-name">${esc(u.name)} <span class="god-id">#${id}</span></span><input class="input god-input" type="number" id="gid-${id}" placeholder="New ID"/><button class="btn btn-sm btn-primary" onclick="changeId(${id})">Set</button></div>`;}).join('');
+  document.getElementById('god-pts').innerHTML=ids.map(id=>{const u=users[id]||{name:'User #'+id,points:0};return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><div class="pts-ctrl"><button class="pts-btn minus" onclick="adjustPts(${id},-10)">−</button><span class="pts-val" id="pv-${id}">${u.points||0}</span><button class="pts-btn plus" onclick="adjustPts(${id},10)">+</button></div></div>`;}).join('');
+  document.getElementById('god-warn').innerHTML=ids.filter(id=>id!==GOD_ID).map(id=>{const u=users[id]||{name:'User #'+id};return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><input class="input god-input" type="text" id="gw-${id}" placeholder="Warning message"/><button class="btn btn-sm btn-warn" onclick="sendWarn(${id})">Send</button></div>`;}).join('');
+  document.getElementById('god-ban').innerHTML=ids.filter(id=>id!==GOD_ID).map(id=>{const u=users[id]||{name:'User #'+id};const b=u.banned||false;return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><span class="tag ${b?'danger':'success'}">${b?'Banned':'Active'}</span><button class="btn btn-sm ${b?'btn-success':'btn-danger'}" onclick="toggleBan(${id})">${b?'Unban':'Ban'}</button></div>`;}).join('');
+  document.getElementById('god-del').innerHTML=ids.filter(id=>id!==GOD_ID).map(id=>{const u=users[id]||{name:'User #'+id};return `<div class="god-row"><span class="god-name">${esc(u.name)} <span class="god-id">#${id}</span></span><button class="btn btn-sm btn-danger" onclick="delAcc(${id})">Delete</button></div>`;}).join('');
+  renderVoteGod();
+  renderRankPickers();
+  const lt=document.getElementById('lb-title-input'),ls=document.getElementById('lb-sub-input');
+  if(lt&&document.activeElement!==lt)lt.value=lbMeta.title||'';
+  if(ls&&document.activeElement!==ls)ls.value=lbMeta.sub||'';
+}
+window.changePw=async function(id){const inp=document.getElementById('gpw-'+id);const v=inp.value.trim();if(!v){toast('Enter password');return;}passwords[id]=v;await set(ref(db,'passwords/'+id),v);inp.value='';toast('Updated');};
+window.changeUn=async function(id){const inp=document.getElementById('gun-'+id);const v=inp.value.trim();if(!v){toast('Enter name');return;}if(!users[id])users[id]={...defaultProfiles[id]||{}};users[id].name=v;users[id].initials=v[0].toUpperCase();await saveUser(id);inp.value='';renderGod();renderMembers();};
+window.changeId=async function(oldId){
+  const inp=document.getElementById('gid-'+oldId);const newId=parseInt(inp.value.trim());
+  if(!newId||isNaN(newId)){toast('Invalid ID');return;}if(newId===oldId)return;
+  if(passwords[newId]||users[newId]){toast('ID exists');return;}
+  const u=JSON.parse(JSON.stringify(users[oldId]||defaultProfiles[oldId]||{}));const pw=passwords[oldId];
+  users[newId]=u;passwords[newId]=pw;
+  await set(ref(db,'users/'+newId),u);await set(ref(db,'passwords/'+newId),pw);
+  delete users[oldId];delete passwords[oldId];
+  await set(ref(db,'users/'+oldId),null);await set(ref(db,'passwords/'+oldId),null);await set(ref(db,'bans/'+oldId),null);
+  if(viewingId===oldId)viewingId=newId;
+  inp.value='';toast('ID changed');renderMembers();renderGod();renderProfile();
+};
+window.adjustPts=async function(id,delta){
+  if(!users[id])users[id]={...defaultProfiles[id]||{},points:0};
+  users[id].points=Math.max(0,(users[id].points||0)+delta);
+  if(users[id].points===0&&id!==GOD_ID){users[id].banned=true;await set(ref(db,'bans/'+id),true);toast('Auto-banned');}
+  await saveUser(id);const el=document.getElementById('pv-'+id);if(el)el.textContent=users[id].points;renderMembers();
+};
+window.sendWarn=async function(id){const inp=document.getElementById('gw-'+id);const v=inp.value.trim();if(!v){toast('Enter message');return;}await set(ref(db,'warnings/'+id),v);inp.value='';toast('Sent');};
+window.toggleBan=async function(id){if(!users[id])users[id]={...defaultProfiles[id]||{}};users[id].banned=!users[id].banned;await saveUser(id);await set(ref(db,'bans/'+id),users[id].banned);toast(users[id].banned?'Banned':'Unbanned');renderGod();renderMembers();};
+window.delAcc=async function(id){
+  if(!confirm('Delete account #'+id+'?'))return;
+  delete users[id];delete passwords[id];
+  await set(ref(db,'users/'+id),null);await set(ref(db,'passwords/'+id),null);await set(ref(db,'bans/'+id),null);await set(ref(db,'warnings/'+id),null);
+  if(viewingId===id){viewingId=GOD_ID;renderProfile();}
+  toast('Deleted');renderMembers();renderGod();renderDmList();
+};
+window.createAccount=async function(){
+  const name=document.getElementById('new-name').value.trim();const role=document.getElementById('new-role').value.trim();
+  const id=parseInt(document.getElementById('new-id').value.trim());const pw=document.getElementById('new-pw').value.trim();
+  const pts=parseInt(document.getElementById('new-pts').value)||50;const err=document.getElementById('new-err');
+  err.textContent='';
+  if(!name){err.textContent='Enter name';return;}if(!role){err.textContent='Enter role';return;}
+  if(!id||isNaN(id)){err.textContent='Invalid ID';return;}if(!pw){err.textContent='Enter password';return;}
+  if(users[id]||passwords[id]){err.textContent='ID exists';return;}
+  const u={name,role,initials:name[0].toUpperCase(),about:'',skills:[],projects:[],email:'',location:'',logoUrl:'',points:pts,banned:false};
+  users[id]=u;passwords[id]=pw;
+  await set(ref(db,'users/'+id),u);await set(ref(db,'passwords/'+id),pw);
+  ['new-name','new-role','new-pw'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('new-id').value='';document.getElementById('new-pts').value='50';
+  toast('Account created');renderMembers();renderGod();renderDmList();
+};
+window.toggleParty=async()=>{if(loggedInId!==GOD_ID)return;await set(ref(db,'partymode'),!partyOn);};
+
+/* ══════════ BROWSER NOTIFICATIONS + OFFLINE INBOX ══════════ */
+const _NOTIF_LS='epckids_notifs_';
+
+/* Request browser notification permission on first interaction */
+function _requestNotifPerm(){
+  if('Notification' in window && Notification.permission==='default'){
+    Notification.requestPermission();
+  }
+}
+document.addEventListener('click',_requestNotifPerm,{once:true});
+
+/* Show a browser/OS push notification (works when tab is backgrounded) */
+function _pushNotif(title,body){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  try{
+    const n=new Notification(title,{body,icon:'',tag:'epc-call',renotify:true});
+    n.onclick=()=>{window.focus();n.close();};
+    setTimeout(()=>n.close(),15000);
+  }catch(e){}
+}
+
+/* Store notification in localStorage for a user (works even if they're offline/not logged in) */
+function _storeOfflineNotif(userId,icon,msg){
+  try{
+    const key=_NOTIF_LS+userId;
+    const list=JSON.parse(localStorage.getItem(key)||'[]');
+    list.push({icon,msg,ts:Date.now()});
+    /* keep last 20 */
+    if(list.length>20)list.splice(0,list.length-20);
+    localStorage.setItem(key,JSON.stringify(list));
+  }catch(e){}
+}
+
+/* On login: read pending offline notifications for this user and show them */
+function _showOfflineNotifs(userId){
+  try{
+    const key=_NOTIF_LS+userId;
+    const list=JSON.parse(localStorage.getItem(key)||'[]');
+    if(!list.length)return;
+    localStorage.removeItem(key);
+    /* Show as in-app toast sequence */
+    list.slice(-5).reverse().forEach((n,i)=>{
+      setTimeout(()=>{
+        const t=document.getElementById('toast');
+        if(t){t.textContent=n.icon+' '+n.msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+      },i*1200);
+    });
+    /* Also show browser notif for the most recent */
+    const last=list[list.length-1];
+    _pushNotif('EPC Kids — missed notification',last.icon+' '+last.msg);
+  }catch(e){}
+}
+
+/* ══════════ DISCO BALL + PARTY ══════════ */
+const _confCanvas=document.getElementById('confetti-canvas');
+const _confCtx=_confCanvas?_confCanvas.getContext('2d'):null;
+const _discoBallCanvas=document.getElementById('disco-ball-canvas');
+const _discoCanvas=document.getElementById('disco-canvas');
+const _ballCtx=_discoBallCanvas?_discoBallCanvas.getContext('2d'):null;
+const _discoCtx=_discoCanvas?_discoCanvas.getContext('2d'):null;
+let _discoAngle=0,_discoRaf=null,_confPieces=[];
+const _TC=['#ff0080','#ff4400','#ffff00','#00ff88','#00ffff','#0088ff','#ff00ff','#ff8800','#ffffff'];
+
+function _drawBall(a){
+  if(!_ballCtx)return;
+  const R=44,cx=50,cy=50;_ballCtx.clearRect(0,0,100,100);
+  const g=_ballCtx.createRadialGradient(cx-14,cy-14,4,cx,cy,R);
+  g.addColorStop(0,'#555');g.addColorStop(0.4,'#222');g.addColorStop(1,'#000');
+  _ballCtx.beginPath();_ballCtx.arc(cx,cy,R,0,Math.PI*2);_ballCtx.fillStyle=g;_ballCtx.fill();
+  for(let r=0;r<10;r++){const phi=(r/10)*Math.PI,yc=cy+R*Math.cos(phi),rR=R*Math.sin(phi);
+    for(let c=0;c<12;c++){const th=(c/12)*Math.PI*2+a,tx=cx+rR*Math.cos(th);
+      if(Math.sqrt((tx-cx)**2+(yc-cy)**2)>R-3)continue;
+      const tw=Math.max(2,(R*2/12)*Math.abs(Math.cos(th))*0.7),th2=Math.max(2,(R*2/10)*0.55);
+      _ballCtx.save();_ballCtx.beginPath();_ballCtx.roundRect(tx-tw/2,yc-th2/2,tw,th2,1);
+      _ballCtx.fillStyle=_TC[(r*3+c+Math.floor(a*3))%_TC.length];
+      _ballCtx.globalAlpha=0.7+0.3*Math.abs(Math.cos(th));_ballCtx.shadowColor=_TC[(r*3+c+Math.floor(a*3))%_TC.length];_ballCtx.shadowBlur=4;_ballCtx.fill();_ballCtx.restore();
+    }
+  }
+  const sh=_ballCtx.createRadialGradient(cx-16,cy-16,0,cx,cy,R);sh.addColorStop(0,'rgba(255,255,255,0.22)');sh.addColorStop(1,'rgba(0,0,0,0)');
+  _ballCtx.beginPath();_ballCtx.arc(cx,cy,R,0,Math.PI*2);_ballCtx.fillStyle=sh;_ballCtx.fill();
+  _ballCtx.save();_ballCtx.globalCompositeOperation='destination-in';_ballCtx.beginPath();_ballCtx.arc(cx,cy,R,0,Math.PI*2);_ballCtx.fill();_ballCtx.restore();
+}
+
+function _drawBeams(a){
+  if(!_discoCtx)return;
+  _discoCanvas.width=window.innerWidth;_discoCanvas.height=window.innerHeight;_discoCtx.clearRect(0,0,_discoCanvas.width,_discoCanvas.height);
+  const ox=window.innerWidth/2,oy=80;
+  for(let i=0;i<14;i++){const ang=(i/14)*Math.PI*2+a*1.5,col=_TC[i%_TC.length];
+    const gd=_discoCtx.createLinearGradient(ox,oy,ox+Math.cos(ang)*window.innerWidth,oy+Math.sin(ang)*window.innerHeight);
+    gd.addColorStop(0,col+'cc');gd.addColorStop(0.3,col+'44');gd.addColorStop(1,col+'00');
+    _discoCtx.save();_discoCtx.beginPath();const sp=0.03;
+    _discoCtx.moveTo(ox,oy);_discoCtx.lineTo(ox+Math.cos(ang-sp)*window.innerWidth,oy+Math.sin(ang-sp)*window.innerHeight);_discoCtx.lineTo(ox+Math.cos(ang+sp)*window.innerWidth,oy+Math.sin(ang+sp)*window.innerHeight);
+    _discoCtx.closePath();_discoCtx.fillStyle=gd;_discoCtx.globalAlpha=0.15;_discoCtx.fill();_discoCtx.restore();
+  }
+  for(let i=0;i<8;i++){const sa=(i/8)*Math.PI*2+a*2.1,sx=window.innerWidth/2+Math.cos(sa)*window.innerWidth*0.35,sy=window.innerHeight-40;
+    const sc=_TC[(i+2)%_TC.length],sg=_discoCtx.createRadialGradient(sx,sy,0,sx,sy,60);
+    sg.addColorStop(0,sc+'88');sg.addColorStop(1,sc+'00');
+    _discoCtx.beginPath();_discoCtx.ellipse(sx,sy,60,20,0,0,Math.PI*2);_discoCtx.fillStyle=sg;_discoCtx.globalAlpha=0.35;_discoCtx.fill();
+  }
+}
+
+function _animDisco(){if(!partyOn)return;_discoAngle+=0.012;_drawBall(_discoAngle);_drawBeams(_discoAngle);_discoRaf=requestAnimationFrame(_animDisco);}
+function _startDisco(){if(_discoRaf)cancelAnimationFrame(_discoRaf);if(_discoCanvas){_discoCanvas.width=window.innerWidth;_discoCanvas.height=window.innerHeight;}_animDisco();}
+function _stopDisco(){if(_discoRaf)cancelAnimationFrame(_discoRaf);_discoRaf=null;if(_discoCtx)_discoCtx.clearRect(0,0,_discoCanvas.width,_discoCanvas.height);if(_ballCtx)_ballCtx.clearRect(0,0,100,100);}
+
+function _startConfetti(){if(!_confCanvas)return;_confCanvas.width=window.innerWidth;_confCanvas.height=window.innerHeight;_confPieces=Array.from({length:120},()=>({x:Math.random()*_confCanvas.width,y:Math.random()*_confCanvas.height-_confCanvas.height,r:Math.random()*7+3,c:`hsl(${Math.random()*360},100%,60%)`,s:Math.random()*3+1,a:Math.random()*360}));_loopConf();}
+function _loopConf(){if(!partyOn)return;_confCtx.clearRect(0,0,_confCanvas.width,_confCanvas.height);_confPieces.forEach(p=>{p.y+=p.s;p.a+=3;if(p.y>_confCanvas.height){p.y=-10;p.x=Math.random()*_confCanvas.width;}_confCtx.save();_confCtx.translate(p.x,p.y);_confCtx.rotate(p.a*Math.PI/180);_confCtx.fillStyle=p.c;_confCtx.fillRect(-p.r/2,-p.r/2,p.r,p.r);_confCtx.restore();});requestAnimationFrame(_loopConf);}
+
+function _applyParty(on){
+  document.body.classList.toggle('party-on',on);
+  if(on){_startConfetti();_startDisco();}else{_stopDisco();}
+}
+
+/* ══════════ CHAT IMAGE UPLOAD ══════════ */
+window.sendChatImage=function(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      const maxW=400,maxH=400,scale=Math.min(1,maxW/img.width,maxH/img.height);
+      const c=document.createElement('canvas');c.width=img.width*scale;c.height=img.height*scale;
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      const data=c.toDataURL('image/jpeg',0.6);
+      const u=users[loggedInId]||defaultProfiles[loggedInId];
+      push(ref(db,'groupchat'),{senderId:loggedInId,senderName:u.name,initials:(u.initials||u.name||'?')[0],logoUrl:u.logoUrl||'',imgData:data,ts:Date.now()});
+    };img.src=ev.target.result;
+  };reader.readAsDataURL(file);e.target.value='';
+};
+
+/* patch renderChat to support images */
+const _origRenderChat=window.renderChat||null;
+window.renderChat=function(data){
+  const box=document.getElementById('chat-msgs');
+  const msgs=Object.values(data).sort((a,b)=>a.ts-b.ts);
+  if(!msgs.length){box.innerHTML='<div class="chat-empty">No messages yet</div>';return;}
+  box.innerHTML=msgs.map(m=>{
+    const mine=parseInt(m.senderId)===loggedInId;
+    const av=m.logoUrl?`<img src="${m.logoUrl}"/>`:(m.initials||'?');
+    const time=new Date(m.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    const content=m.imgData?`<img class="msg-img" src="${m.imgData}" onclick="this.requestFullscreen&&this.requestFullscreen()"/>`:`<div class="msg-bubble">${esc(m.text||'')}</div>`;
+    return `<div class="msg ${mine?'mine':''}"><div class="av av-sm">${av}</div><div class="msg-body">${!mine?`<div class="msg-sender">${esc(m.senderName)}</div>`:''} ${content}<div class="msg-time">${time}</div></div></div>`;
+  }).join('');scrollChat();
+};
+
+/* ══════════ STAR RATINGS ══════════ */
+const _LS_R='epckids_ratings';
+let _ratings={};
+try{_ratings=JSON.parse(localStorage.getItem(_LS_R)||'{}');}catch(e){}
+function _saveRatings(){try{localStorage.setItem(_LS_R,JSON.stringify(_ratings));}catch(e){}}
+function _avgRating(id){const r=_ratings[id];if(!r)return 0;const v=Object.values(r);return v.length?v.reduce((a,b)=>a+b,0)/v.length:0;}
+function _starsHtml(id,interactive){
+  const my=(_ratings[id]&&_ratings[id][loggedInId])||0;
+  const avg=_avgRating(id);const show=interactive?my:avg;
+  return Array.from({length:5},(_,i)=>`<span class="star${i<Math.round(show)?' lit':''}" ${interactive?`onclick="rateUser(${id},${i+1})" onmouseover="_hoverStars(this,${i+1})" onmouseout="_resetStars(this.parentElement,${id})"`:''}>★</span>`).join('');
+}
+window._hoverStars=function(el,n){[...el.parentElement.querySelectorAll('.star')].forEach((s,i)=>{s.classList.toggle('lit',i<n);});};
+window._resetStars=function(row,id){const my=(_ratings[id]&&_ratings[id][loggedInId])||0;[...row.querySelectorAll('.star')].forEach((s,i)=>s.classList.toggle('lit',i<my));};
+window.rateUser=function(id,stars){if(!loggedInId||id===loggedInId)return;if(!_ratings[id])_ratings[id]={};_ratings[id][loggedInId]=stars;_saveRatings();renderMembers();renderProfile();toast('Rated '+stars+' ⭐');};
+
+/* patch renderMembers to show star ratings */
+const _origRenderMembers=window.renderMembers;
+window.renderMembers=function(){
+  _origRenderMembers();
+  /* append ratings under each member name */
+  allIds().forEach(id=>{
+    const card=document.querySelector(`.member[onclick="viewMember(${id})"]`);
+    if(!card)return;
+    const info=card.querySelector('.member-info');if(!info)return;
+    let ratingEl=info.querySelector('.member-rating');
+    if(!ratingEl){ratingEl=document.createElement('div');ratingEl.className='member-rating';info.appendChild(ratingEl);}
+    const avg=_avgRating(id);
+    ratingEl.textContent=avg>0?('★').repeat(Math.round(avg))+('☆').repeat(5-Math.round(avg)):'☆☆☆☆☆';
+    ratingEl.style.color=avg>0?'var(--gold)':'#333';
+  });
+};
+
+/* patch renderProfile to show interactive stars */
+const _origRenderProfile=window.renderProfile;
+window.renderProfile=function(){
+  _origRenderProfile();
+  const area=document.getElementById('profile-area');if(!area)return;
+  const badgeRow=area.querySelector('.profile-badge-row');if(!badgeRow)return;
+  const canRate=loggedInId&&viewingId!==loggedInId;
+  const avg=_avgRating(viewingId),cnt=_ratings[viewingId]?Object.keys(_ratings[viewingId]).length:0;
+  const div=document.createElement('div');div.className='stars-row';
+  div.innerHTML=_starsHtml(viewingId,canRate)+`<span class="rating-avg">${avg>0?avg.toFixed(1)+' ('+cnt+')':'No ratings'}</span>`;
+  badgeRow.after(div);
+  if(canRate){const hint=document.createElement('div');hint.style.cssText='font-size:10px;color:var(--text-3);margin-top:2px;';hint.textContent='Tap stars to rate';div.after(hint);}
+};
+
+init();
+</script>
+
+<div id="call-notif-popup">
+  <div class="cnp-card">
+    <div class="cnp-icon">📞</div>
+    <div>
+      <div class="cnp-title">Call Started!</div>
+      <div class="cnp-msg" id="cnp-msg">Someone started a call</div>
+      <div class="cnp-btns">
+        <button class="btn btn-primary" style="padding:5px 12px;font-size:11px;" onclick="joinFromNotif()">Join</button>
+        <button class="btn" style="padding:5px 12px;font-size:11px;" onclick="dismissCallNotif()">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BACKGROUND PICKER PANEL -->
+<div id="bg-panel" style="display:none;position:fixed;bottom:70px;left:16px;z-index:9990;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;width:240px;box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+  <div style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:12px;color:var(--accent);">BACKGROUND</div>
+  <div class="bg-picker">
+    <div class="bg-swatch active" style="background:#06070b;" onclick="setBg('neon','this')" title="Dark Neon"></div>
+    <div class="bg-swatch" style="background:#070d1a;" onclick="setBg('midnight','this')" title="Midnight Blue"></div>
+    <div class="bg-swatch" style="background:#040d07;" onclick="setBg('forest','this')" title="Dark Forest"></div>
+    <div class="bg-swatch" style="background:#0a060f;" onclick="setBg('purple','this')" title="Dark Purple"></div>
+    <div class="bg-swatch" style="background:#0f0505;" onclick="setBg('red','this')" title="Dark Red"></div>
+    <div class="bg-swatch" style="background:#0f0d08;" onclick="setBg('warm','this')" title="Dark Warm"></div>
+    <div class="bg-swatch" style="background:linear-gradient(135deg,#06070b,#0a0515,#070b10);" onclick="setBg('gradient','this')" title="Gradient"></div>
+    <div class="bg-swatch" style="background:repeating-linear-gradient(0deg,#06070b,#06070b 24px,#0a0f06 24px,#0a0f06 25px);" onclick="setBg('matrix','this')" title="Matrix"></div>
+    <div class="bg-swatch" style="background:#f5f5f0;border:1px solid #ddd;" onclick="setBg('white','this')" title="Light"></div>
+    <div class="bg-swatch" style="background:#f8f4e8;border:1px solid #ddd;" onclick="setBg('paper','this')" title="Paper"></div>
+  </div>
+  <div style="font-family:'Orbitron',sans-serif;font-size:10px;color:var(--text-2);margin-bottom:8px;letter-spacing:0.08em;">CUSTOM COLOR</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <input type="color" id="custom-bg-color" value="#06070b" style="width:40px;height:32px;border:none;border-radius:6px;cursor:pointer;padding:0;background:none;"/>
+    <button class="btn" style="flex:1;font-size:11px;" onclick="setCustomBg()">Apply</button>
+  </div>
+</div>
+
+<div id="dm-notif-toast">
+  <div class="dm-notif-card" onclick="openDmFromNotif()" style="cursor:pointer;">
+    <div class="dm-notif-av" id="dnt-av">?</div>
+    <div>
+      <div class="dm-notif-name" id="dnt-name">New message</div>
+      <div class="dm-notif-msg" id="dnt-msg">…</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
