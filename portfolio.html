@@ -460,7 +460,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 .upload-progress.show{display:block;}
 .upload-progress-bar{height:100%;background:var(--accent);box-shadow:0 0 6px var(--accent-glow);width:0%;transition:width 0.2s;}
 
-/* ========== GOD MODE ========== */
+/* ========== MANAGER CONTROLS ========== */
 .god-row{
   display:flex;align-items:center;gap:10px;padding:10px 12px;
   background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r-sm);margin-bottom:6px;
@@ -604,6 +604,35 @@ body.party-on #disco-ball-el{display:flex;}
 .star:hover{transform:scale(1.3);}
 .rating-avg{font-size:.62rem;color:var(--gold);margin-left:5px;font-family:'Orbitron',sans-serif;}
 .member-rating{font-size:.68rem;color:var(--gold);margin-top:2px;}
+/* ── Criminal Records ── */
+.crime-person-block{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);margin-bottom:18px;overflow:hidden;}
+.crime-person-header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--panel-2);}
+.crime-person-name{font-weight:700;font-size:15px;}
+.crime-person-role{font-size:12px;color:var(--text-2);}
+.crime-count{margin-left:auto;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#ff000022;color:#ff4444;border:1px solid #ff444433;}
+.crime-count.clean{background:#00ff8822;color:#00cc66;border-color:#00ff8833;}
+.crime-entries{padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+.crime-entry{background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;position:relative;}
+.crime-entry-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.crime-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;font-family:'Orbitron',sans-serif;}
+.crime-badge.minor{background:#ffff0022;color:#cccc00;border:1px solid #cccc0044;}
+.crime-badge.moderate{background:#ff880022;color:#ff8800;border:1px solid #ff880044;}
+.crime-badge.serious{background:#ff330022;color:#ff3300;border:1px solid #ff330044;}
+.crime-badge.capital{background:#44000099;color:#ff0000;border:1px solid #ff0000aa;animation:crimeFlash 1.5s ease-in-out infinite;}
+@keyframes crimeFlash{0%,100%{box-shadow:0 0 0px #ff0000;}50%{box-shadow:0 0 10px #ff000088;}}
+.crime-offence{font-size:14px;font-weight:600;color:var(--text-1);}
+.crime-notes{font-size:12px;color:var(--text-2);margin-top:3px;}
+.crime-meta{font-size:11px;color:var(--text-3);margin-top:5px;}
+.crime-delete{position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;font-size:14px;color:var(--text-3);opacity:0.5;}
+.crime-delete:hover{opacity:1;color:#ff4444;}
+.crime-clean-msg{text-align:center;padding:14px;font-size:13px;color:var(--text-3);}
+.crime-statement-section{padding:10px 16px 14px;border-top:1px solid var(--line);background:var(--panel-2);}
+.crime-statement-label{font-size:11px;font-family:'Orbitron',sans-serif;color:var(--text-3);margin-bottom:6px;letter-spacing:.05em;}
+.crime-statement-text{font-size:13px;color:var(--text-2);line-height:1.6;white-space:pre-wrap;font-style:italic;}
+.crime-statement-text.empty{color:var(--text-3);font-style:normal;}
+.crime-statement-edit{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-1);padding:8px 10px;font-size:13px;line-height:1.6;resize:vertical;min-height:70px;font-family:inherit;}
+.crime-statement-edit:focus{outline:none;border-color:var(--accent);}
+.crime-stmt-btns{display:flex;gap:8px;margin-top:6px;}
 </style>
 </head>
 <body>
@@ -662,9 +691,11 @@ body.party-on #disco-ball-el{display:flex;}
         <button class="sb-item" id="nav-leaderboard" onclick="go('leaderboard')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Leaderboard</button>
         <button class="sb-item" id="nav-complaints" onclick="go('complaints')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Complaints</button>
         <button class="sb-item" id="nav-music" onclick="go('music')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Music</button>
+        <button class="sb-item" id="nav-pdfs" onclick="go('pdfs')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>PDFs</button>
 
         <button class="sb-item" id="nav-call" onclick="go('call')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.08 6.08l1.09-.91a2 2 0 0 1 2.11-.45c.91.33 1.85.56 2.81.69A2 2 0 0 1 22 16.92z"/></svg>Voice Call</button>
-        <button class="sb-item god-only" id="nav-god" onclick="go('god')" style="display:none;"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>God Mode</button>
+        <button class="sb-item god-only" id="nav-god" onclick="go('god')" style="display:none;"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Manager Controls</button>
+        <button class="sb-item" id="nav-crimes" onclick="go('crimes')"><svg class="sb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Criminal Records</button>
       </nav>
 
       <div class="sb-foot">
@@ -722,7 +753,14 @@ body.party-on #disco-ball-el{display:flex;}
 
       <!-- GROUP CHAT -->
       <div class="page" id="page-chat" style="display:none;">
-        <div class="page-h"><div><div class="page-title">Group <span class="serif accent">chat</span></div><div class="page-sub">Everyone can see and respond</div></div></div>
+        <div class="page-h"><div><div class="page-title">Group <span class="serif accent">chat</span></div><div class="page-sub">Everyone can see and respond · type <b>/fartingmachine</b> 💨 or <b>/edric</b> 🫡</div></div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button id="fart-set-btn" onclick="document.getElementById('fart-img-input').click()" style="display:none;" class="btn">💨 Set Fart Pic</button>
+            <button id="edric-set-btn" onclick="document.getElementById('edric-img-input').click()" style="display:none;" class="btn">🫡 Set Edric Pic</button>
+          </div>
+          <input type="file" id="fart-img-input" accept="image/*" style="display:none" onchange="saveFartImg(event)"/>
+          <input type="file" id="edric-img-input" accept="image/*" style="display:none" onchange="saveEdricImg(event)"/>
+        </div>
         <div class="chat">
           <div class="chat-h">
             <div class="av av-md" style="background:var(--accent-soft);color:var(--accent);">#</div>
@@ -838,7 +876,13 @@ body.party-on #disco-ball-el{display:flex;}
         </div>
       </div>
 
-      <!-- GOD MODE -->
+      <!-- PDF LIBRARY -->
+      <div class="page" id="page-pdfs" style="display:none;">
+        <div class="page-h"><div><div class="page-title">📄 PDF <span class="serif accent">Library</span></div><div class="page-sub">Documents shared by the Manager</div></div></div>
+        <div id="pdf-library-list"><div class="card"><div class="empty">No PDFs shared yet.</div></div></div>
+      </div>
+
+      <!-- MANAGER CONTROLS -->
       <div class="page" id="page-call" style="display:none;">
         <div class="page-h"><div><div class="page-title">Voice <span class="serif accent">call</span></div><div class="page-sub">Live voice call for all members</div></div></div>
         <div id="call-idle" class="card" style="text-align:center;padding:40px 20px;">
@@ -865,8 +909,35 @@ body.party-on #disco-ball-el{display:flex;}
         </div>
       </div>
 
+      <div class="page" id="page-crimes" style="display:none;">
+        <div class="page-h">
+          <div>
+            <div class="page-title">🚔 Criminal <span class="serif accent">Records</span></div>
+            <div class="page-sub">Official EPC Kids offence log</div>
+          </div>
+        </div>
+        <!-- God only: file a charge -->
+        <div class="card" id="add-crime-card" style="display:none;">
+          <div class="card-h"><div><div class="card-title">➕ File a Charge</div></div></div>
+          <div class="field"><label class="label">Suspect</label><select class="input" id="crime-suspect"></select></div>
+          <div class="field"><label class="label">Offence</label><input class="input" id="crime-offence" placeholder="e.g. Stealing snacks, Being too loud…"/></div>
+          <div class="field"><label class="label">Severity</label>
+            <select class="input" id="crime-severity">
+              <option value="minor">⚠️ Minor</option>
+              <option value="moderate">🔶 Moderate</option>
+              <option value="serious">🔴 Serious</option>
+              <option value="capital">💀 Capital</option>
+            </select>
+          </div>
+          <div class="field"><label class="label">Evidence / Notes (optional)</label><textarea class="input" id="crime-notes" placeholder="Any extra details…" rows="2"></textarea></div>
+          <button class="btn btn-primary" onclick="fileCrime()" style="margin-top:4px;">🔒 File Charge</button>
+        </div>
+        <!-- Per-person records -->
+        <div id="crimes-list"></div>
+      </div>
+
       <div class="page" id="page-god" style="display:none;">
-        <div class="page-h"><div><div class="page-title">God <span class="serif accent">mode</span></div><div class="page-sub">Manager controls — Saairishvanth only</div></div></div>
+        <div class="page-h"><div><div class="page-title">Manager <span class="serif accent">Controls</span></div><div class="page-sub">Full control panel — Saairishvanth only</div></div></div>
 
         <div class="card">
           <div class="card-h"><div><div class="card-title">📢 Pin Announcement</div><div class="card-sub">Visible to all members</div></div></div>
@@ -895,6 +966,23 @@ body.party-on #disco-ball-el{display:flex;}
           </div>
         </div>
 
+        <!-- SEND PDF TO ALL MEMBERS -->
+        <div class="card">
+          <div class="card-h"><div><div class="card-title">📄 Send PDF to Everyone</div><div class="card-sub">Members get a download button in Group Chat</div></div></div>
+          <div class="field">
+            <label class="label">Select PDF</label>
+            <div class="upload-area" onclick="document.getElementById('manager-pdf-upload').click()">
+              <span class="upload-area-text" id="pdf-upload-label">📎 Click to choose a PDF file</span>
+            </div>
+            <input type="file" id="manager-pdf-upload" accept="application/pdf" style="display:none" onchange="handleManagerPdf(event)"/>
+          </div>
+          <div class="field">
+            <label class="label">Message (optional)</label>
+            <input class="input" id="pdf-msg" placeholder="e.g. EPC Official Rules — please read!"/>
+          </div>
+          <button class="btn btn-primary" onclick="sendPdfToAll()">📤 Send to All Members</button>
+        </div>
+
         <div class="card">
           <div class="card-h"><div><div class="card-title">🗳️ Voting Control</div><div class="card-sub">Set the question and choose candidates</div></div></div>
           <div class="field"><label class="label">Vote question</label><input class="input" type="text" id="vote-title-input" placeholder="e.g. Who should lead the next event?"/></div>
@@ -917,8 +1005,8 @@ body.party-on #disco-ball-el{display:flex;}
         </div>
 
         <div class="card" style="border-color:rgba(230,200,105,0.3);">
-          <div class="card-title" style="color:var(--gold);">⚡ God Mode Access</div>
-          <div class="card-sub" style="margin-bottom:12px;">Grant or revoke God Mode for any member</div>
+          <div class="card-title" style="color:var(--gold);">⚡ Manager Access</div>
+          <div class="card-sub" style="margin-bottom:12px;">Grant or revoke Manager Access for any member</div>
           <div id="god-grants"></div>
         </div>
 
@@ -1412,6 +1500,10 @@ window.login=async function(){
   updateSidebarUser();
   _requestNotifPerm();
   _showOfflineNotifs(id);
+  const fartBtn=document.getElementById('fart-set-btn');
+  if(fartBtn)fartBtn.style.display=id===126943?'':'none';
+  const edricBtn=document.getElementById('edric-set-btn');
+  if(edricBtn)edricBtn.style.display=id===126943?'':'none';
   const annSnap=await get(ref(db,'announcement'));
   if(annSnap.exists()&&annSnap.val()&&annSnap.val().msg)showAnnPopup(annSnap.val());
   onValue(ref(db,'warnings/'+id),s=>{if(s.exists()&&s.val()){document.getElementById('warn-text').textContent=s.val();document.getElementById('warn-modal').classList.add('show');}});
@@ -1459,7 +1551,7 @@ function updateSidebarUser(){
 
 /* ===== NAV ===== */
 window.go=function(tab){
-  ['profiles','dms','chat','announcements','calendar','voting','leaderboard','complaints','music','call','god'].forEach(t=>{
+  ['profiles','dms','chat','announcements','calendar','voting','leaderboard','complaints','music','call','god','crimes','pdfs'].forEach(t=>{
     const p=document.getElementById('page-'+t);if(p)p.style.display=t===tab?'block':'none';
     const n=document.getElementById('nav-'+t);if(n)n.classList.toggle('active',t===tab);
   });
@@ -1472,6 +1564,8 @@ window.go=function(tab){
   if(tab==='leaderboard')renderLeaderboard();
   if(tab==='music')renderMusic();
   if(tab==='call')renderCall();
+  if(tab==='crimes')renderCrimes();
+  if(tab==='pdfs')renderPdfLibrary();
   closeSidebar();
 };
 
@@ -1576,6 +1670,20 @@ window.renderProfile=function(){
 window.sendChat=async function(){
   const inp=document.getElementById('chat-input');const txt=inp.value.trim();if(!txt)return;
   const u=users[loggedInId]||defaultProfiles[loggedInId];
+  /* ── /fartingmachine command ── */
+  if(txt.trim().toLowerCase()==='/fartingmachine'){
+    const fartImg=localStorage.getItem('epckids_fartimg');
+    if(!fartImg){toast('💨 No farting machine image set yet! God must set it.');inp.value='';return;}
+    await push(ref(db,'groupchat'),{senderId:loggedInId,senderName:u.name,initials:(u.initials||u.name||'?')[0],logoUrl:u.logoUrl||'',imgData:fartImg,fartCmd:true,ts:Date.now()});
+    inp.value='';inp.focus();return;
+  }
+  /* ── /edric command ── */
+  if(txt.trim().toLowerCase()==='/edric'){
+    const edricImg=localStorage.getItem('epckids_edricimg');
+    if(!edricImg){toast('🫡 No Edric image set yet! Manager must set it.');inp.value='';return;}
+    await push(ref(db,'groupchat'),{senderId:loggedInId,senderName:u.name,initials:(u.initials||u.name||'?')[0],logoUrl:u.logoUrl||'',imgData:edricImg,edricCmd:true,ts:Date.now()});
+    inp.value='';inp.focus();return;
+  }
   await push(ref(db,'groupchat'),{senderId:loggedInId,senderName:u.name,initials:(u.initials||u.name||'?')[0],logoUrl:u.logoUrl||'',text:txt,ts:Date.now()});
   inp.value='';inp.focus();
 };
@@ -1587,7 +1695,19 @@ function renderChat(data){
     const mine=parseInt(m.senderId)===loggedInId;
     const av=m.logoUrl?`<img src="${m.logoUrl}"/>`:(m.initials||'?');
     const time=new Date(m.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    return `<div class="msg ${mine?'mine':''}"><div class="av av-sm">${av}</div><div class="msg-body">${!mine?`<div class="msg-sender">${esc(m.senderName)}</div>`:''}<div class="msg-bubble">${esc(m.text)}</div><div class="msg-time">${time}</div></div></div>`;
+    let content;
+    if(m.fartCmd){
+      content=`<div style="font-size:11px;color:var(--text-3);margin-bottom:4px;">💨 <i>/fartingmachine</i></div><img class="msg-img" src="${m.imgData}" style="max-width:220px;" onclick="this.requestFullscreen&&this.requestFullscreen()"/>`;
+    }else if(m.edricCmd){
+      content=`<div style="font-size:11px;color:var(--text-3);margin-bottom:4px;">🫡 <i>/edric</i></div><img class="msg-img" src="${m.imgData}" style="max-width:220px;" onclick="this.requestFullscreen&&this.requestFullscreen()"/>`;
+    }else if(m.pdfMsg){
+      content=`<div class="msg-bubble" style="display:flex;flex-direction:column;gap:6px;"><div style="font-size:13px;">📄 ${esc(m.pdfLabel||'Document')}</div>${m.pdfNote?`<div style="font-size:11px;color:var(--text-3);">${esc(m.pdfNote)}</div>`:''}<a href="${m.pdfData}" download="${esc(m.pdfLabel||'document.pdf')}" style="background:var(--accent);color:#fff;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;text-decoration:none;width:fit-content;">⬇️ Download PDF</a></div>`;
+    }else if(m.imgData){
+      content=`<img class="msg-img" src="${m.imgData}" onclick="this.requestFullscreen&&this.requestFullscreen()"/>`;
+    }else{
+      content=`<div class="msg-bubble">${esc(m.text||'')}</div>`;
+    }
+    return `<div class="msg ${mine?'mine':''}"><div class="av av-sm">${av}</div><div class="msg-body">${!mine?`<div class="msg-sender">${esc(m.senderName)}</div>`:''} ${content}<div class="msg-time">${time}</div></div></div>`;
   }).join('');scrollChat();
 }
 function scrollChat(){const b=document.getElementById('chat-msgs');if(b)b.scrollTop=b.scrollHeight;}
@@ -1873,7 +1993,7 @@ window.renderLeaderboard=function(){
   const ranked=lbRanks.filter(id=>id&&users[id]).map((id,i)=>({rank:i+1,id:parseInt(id),...users[id]}));
   if(!ranked.length){
     if(loggedInId===GOD_ID){
-      list.innerHTML='<div class="empty">No rankings set yet.<br/><span style="font-size:12px;">Go to God Mode → Leaderboard to pick 1st, 2nd, 3rd…</span></div>';
+      list.innerHTML='<div class="empty">No rankings set yet.<br/><span style="font-size:12px;">Go to Manager Controls → Leaderboard to pick 1st, 2nd, 3rd…</span></div>';
     }else{
       list.innerHTML='<div class="empty">Rankings haven\'t been announced yet.</div>';
     }
@@ -1905,7 +2025,7 @@ window.renderLeaderboard=function(){
   }).join('');
 };
 
-/* ===== RANK PICKERS (God Mode) ===== */
+/* ===== RANK PICKERS (Manager Controls) ===== */
 window.renderRankPickers=function(){
   const wrap=document.getElementById('god-rank-pickers');if(!wrap)return;
   const ids=allIds();
@@ -2124,14 +2244,14 @@ window.deleteSong=async function(id){
   toast('Deleted');
 };
 
-/* ===== GOD MODE ===== */
+/* ===== MANAGER CONTROLS ===== */
 window.toggleGodGrant=async function(id){
-  if(loggedInId!==GOD_ID){toast('Only Saai can grant God Mode!');return;}
+  if(loggedInId!==GOD_ID){toast('Only Saai can grant Manager Access!');return;}
   const had=godGrants[id]===true;
   await set(ref(db,'godGrants/'+id),!had);
   const u=users[id]||{name:'User #'+id};
-  toast(had?u.name+': God Mode revoked':u.name+': God Mode granted!');
-  if(!had)await set(push(ref(db,'notifications/'+id)),{icon:'⚡',msg:'Saairishvanth granted you God Mode!',ts:Date.now(),read:false});
+  toast(had?u.name+': Manager Access revoked':u.name+': Manager Access granted!');
+  if(!had)await set(push(ref(db,'notifications/'+id)),{icon:'⚡',msg:'Saairishvanth granted you Manager Access!',ts:Date.now(),read:false});
 };
 
 window.loadEditProfile=function(){
@@ -2172,7 +2292,7 @@ function renderGod(){
   if(ggEl)ggEl.innerHTML=ids.filter(id=>id!==GOD_ID).map(id=>{
     const u=users[id]||{name:'User #'+id};
     const granted=godGrants[id]===true;
-    return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><span class="tag ${granted?'success':'default'}">${granted?'⚡ God Mode':'Normal'}</span><button class="btn btn-sm ${granted?'btn-danger':'btn-warn'}" onclick="toggleGodGrant(${id})">${granted?'Revoke':'Grant God'}</button></div>`;
+    return `<div class="god-row"><span class="god-name">${esc(u.name)}</span><span class="tag ${granted?'success':'default'}">${granted?'⚡ Manager':'Normal'}</span><button class="btn btn-sm ${granted?'btn-danger':'btn-warn'}" onclick="toggleGodGrant(${id})">${granted?'Revoke':'Grant Access'}</button></div>`;
   }).join('');
   /* edit profile selector */
   const epSel=document.getElementById('edit-profile-sel');
@@ -2243,8 +2363,224 @@ window.createAccount=async function(){
 };
 window.toggleParty=async()=>{if(loggedInId!==GOD_ID)return;await set(ref(db,'partymode'),!partyOn);};
 
-/* ══════════ BROWSER NOTIFICATIONS + OFFLINE INBOX ══════════ */
+/* ══════════ CRIMINAL RECORDS ══════════ */
+const _LS_CRIMES='epckids_crimes';
+let _crimes={};
+try{_crimes=JSON.parse(localStorage.getItem(_LS_CRIMES)||'{}');}catch(e){}
+function _savecrimes(){try{localStorage.setItem(_LS_CRIMES,JSON.stringify(_crimes));}catch(e){}}
+
+window.renderCrimes=function(){
+  const addCard=document.getElementById('add-crime-card');
+  if(addCard)addCard.style.display=isGod()?'block':'none';
+  const sel=document.getElementById('crime-suspect');
+  if(sel){sel.innerHTML=allIds().map(id=>{const u=users[id]||defaultProfiles[id]||{name:'#'+id};return `<option value="${id}">${u.name}</option>`;}).join('');}
+  const container=document.getElementById('crimes-list');
+  if(!container)return;
+  const SLABEL={minor:'⚠️ Minor',moderate:'🔶 Moderate',serious:'🔴 Serious',capital:'💀 Capital'};
+  container.innerHTML=allIds().map(id=>{
+    const u=users[id]||defaultProfiles[id]||{name:'Unknown',role:''};
+    const records=Object.entries(_crimes[id]||{}).filter(([k])=>k!=='__statement__').sort((a,b)=>b[1].ts-a[1].ts);
+    const count=records.length;
+    const countLabel=count===0?'✅ Clean':'🔴 '+count+' offence'+(count===1?'':'s');
+    const countClass=count===0?'crime-count clean':'crime-count';
+    const statement=(_crimes[id]&&_crimes[id].__statement__)||'';
+    const entries=count===0
+      ?`<div class="crime-clean-msg">✅ No charges on record</div>`
+      :records.map(([key,c])=>{
+        const sev=c.severity||'minor';
+        const date=new Date(c.ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+        const filer=users[c.filedBy]?users[c.filedBy].name:'God';
+        if(isGod()){
+          /* EDITABLE entry for god */
+          return `<div class="crime-entry" id="ce-${id}-${key}">
+            <button class="crime-delete" onclick="deleteCrime(${id},'${key}')" title="Delete">🗑️</button>
+            <div class="crime-entry-top"><span class="crime-badge ${sev}">${SLABEL[sev]}</span></div>
+            <div class="crime-offence" id="co-${id}-${key}" onclick="editCrime(${id},'${key}')" title="Click to edit" style="cursor:pointer;" >${esc(c.offence)}</div>
+            ${c.notes?`<div class="crime-notes" id="cn-${id}-${key}" onclick="editCrime(${id},'${key}')" style="cursor:pointer;">📎 ${esc(c.notes)}</div>`:`<div class="crime-notes empty-note" onclick="editCrime(${id},'${key}')" style="cursor:pointer;font-style:italic;">+ add notes</div>`}
+            <div class="crime-meta">Filed by ${esc(filer)} · ${date} <span style="color:var(--accent);margin-left:6px;font-size:10px;" onclick="editCrime(${id},'${key}')">✏️ Edit</span></div>
+          </div>`;
+        }else{
+          return `<div class="crime-entry">
+            <div class="crime-entry-top"><span class="crime-badge ${sev}">${SLABEL[sev]}</span></div>
+            <div class="crime-offence">${esc(c.offence)}</div>
+            ${c.notes?`<div class="crime-notes">📎 ${esc(c.notes)}</div>`:''}
+            <div class="crime-meta">Filed by ${esc(filer)} · ${date}</div>
+          </div>`;
+        }
+      }).join('');
+    const stmtSection=isGod()
+      ?`<div class="crime-statement-section">
+          <div class="crime-statement-label">📋 Official Statement</div>
+          <textarea class="crime-statement-edit" id="stmt-${id}" placeholder="Write an official summary for ${u.name}…">${statement.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+          <div class="crime-stmt-btns">
+            <button class="btn btn-primary" style="font-size:12px;padding:5px 14px;" onclick="saveStatement(${id})">💾 Save</button>
+            ${statement?`<button class="btn" style="font-size:12px;padding:5px 14px;" onclick="clearStatement(${id})">🗑️ Clear</button>`:''}
+          </div>
+        </div>`
+      :statement?`<div class="crime-statement-section"><div class="crime-statement-label">📋 Official Statement</div><div class="crime-statement-text">${esc(statement)}</div></div>`:'';
+    return `<div class="crime-person-block">
+      <div class="crime-person-header">
+        <div class="av av-sm">${avHtml(u)}</div>
+        <div><div class="crime-person-name">${esc(u.name)}</div><div class="crime-person-role">${esc(u.role)}</div></div>
+        <span class="${countClass}">${countLabel}</span>
+      </div>
+      <div class="crime-entries">${entries}</div>
+      ${stmtSection}
+    </div>`;
+  }).join('');
+};
+
+/* inline edit modal */
+window.editCrime=function(userId,key){
+  if(!isGod())return;
+  const c=_crimes[userId]&&_crimes[userId][key];if(!c)return;
+  const SLABEL={minor:'⚠️ Minor',moderate:'🔶 Moderate',serious:'🔴 Serious',capital:'💀 Capital'};
+  let modal=document.getElementById('crime-edit-modal');
+  if(!modal){
+    modal=document.createElement('div');
+    modal.id='crime-edit-modal';
+    modal.className='fullscreen-modal';
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML=`<div class="modal-card" style="max-width:420px;width:90%;padding:24px;">
+    <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;">✏️ Edit Charge</div>
+    <div class="field"><label class="label">Offence</label>
+      <input class="input" id="edit-offence" value="${esc(c.offence)}"/>
+    </div>
+    <div class="field"><label class="label">Severity</label>
+      <select class="input" id="edit-severity">
+        ${['minor','moderate','serious','capital'].map(s=>`<option value="${s}"${s===c.severity?' selected':''}>${SLABEL[s]}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field"><label class="label">Notes</label>
+      <textarea class="input" id="edit-notes" rows="3" placeholder="Evidence / extra details…">${esc(c.notes||'')}</textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px;">
+      <button class="btn btn-primary" onclick="saveCrimeEdit(${userId},'${key}')">💾 Save</button>
+      <button class="btn" onclick="document.getElementById('crime-edit-modal').classList.remove('show')">Cancel</button>
+    </div>
+  </div>`;
+  modal.classList.add('show');
+};
+
+window.saveCrimeEdit=function(userId,key){
+  if(!isGod())return;
+  const offence=document.getElementById('edit-offence').value.trim();
+  const severity=document.getElementById('edit-severity').value;
+  const notes=document.getElementById('edit-notes').value.trim();
+  if(!offence){toast('Offence cannot be empty!');return;}
+  _crimes[userId][key]={..._crimes[userId][key],offence,severity,notes};
+  _savecrimes();
+  document.getElementById('crime-edit-modal').classList.remove('show');
+  toast('Charge updated ✓');
+  renderCrimes();
+};
+
+window.fileCrime=function(){
+  if(!isGod())return;
+  const suspectId=parseInt(document.getElementById('crime-suspect').value);
+  const offence=document.getElementById('crime-offence').value.trim();
+  const severity=document.getElementById('crime-severity').value;
+  const notes=document.getElementById('crime-notes').value.trim();
+  if(!offence){toast('Enter an offence!');return;}
+  if(!_crimes[suspectId])_crimes[suspectId]={};
+  const key=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+  _crimes[suspectId][key]={offence,severity,notes,filedBy:loggedInId,ts:Date.now()};
+  _savecrimes();
+  document.getElementById('crime-offence').value='';
+  document.getElementById('crime-notes').value='';
+  const u=users[suspectId]||{name:'User'};
+  toast('Charge filed against '+u.name+'! 🔒');
+  /* notify the suspect */
+  _storeOfflineNotif(suspectId,'🚔','You have been charged: '+offence);
+  renderCrimes();
+};
+
+window.deleteCrime=function(userId,key){
+  if(!isGod())return;
+  if(!confirm('Delete this charge?'))return;
+  if(_crimes[userId]&&_crimes[userId][key])delete _crimes[userId][key];
+  _savecrimes();renderCrimes();toast('Charge deleted');
+};
+
+
 const _NOTIF_LS='epckids_notifs_';
+
+/* ── Farting Machine ── */
+window.saveFartImg=function(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{const img=new Image();img.onload=()=>{const maxW=500,maxH=500,scale=Math.min(1,maxW/img.width,maxH/img.height);const c=document.createElement('canvas');c.width=img.width*scale;c.height=img.height*scale;c.getContext('2d').drawImage(img,0,0,c.width,c.height);localStorage.setItem('epckids_fartimg',c.toDataURL('image/jpeg',0.7));toast('💨 Farting machine image set!');};img.src=ev.target.result;};reader.readAsDataURL(file);e.target.value='';
+};
+
+/* ── Edric Command ── */
+window.saveEdricImg=function(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{const img=new Image();img.onload=()=>{const maxW=500,maxH=500,scale=Math.min(1,maxW/img.width,maxH/img.height);const c=document.createElement('canvas');c.width=img.width*scale;c.height=img.height*scale;c.getContext('2d').drawImage(img,0,0,c.width,c.height);localStorage.setItem('epckids_edricimg',c.toDataURL('image/jpeg',0.7));toast('🫡 Edric image set!');};img.src=ev.target.result;};reader.readAsDataURL(file);e.target.value='';
+};
+
+/* ── Send PDF to All ── */
+let _managerPdfData=null,_managerPdfName='document.pdf';
+const _LS_PDFS='epckids_pdflib';
+function _getPdfLib(){try{return JSON.parse(localStorage.getItem(_LS_PDFS)||'[]');}catch(e){return[];}}
+function _savePdfLib(lib){try{localStorage.setItem(_LS_PDFS,JSON.stringify(lib));}catch(e){}}
+
+window.handleManagerPdf=function(e){
+  const file=e.target.files[0];if(!file)return;
+  _managerPdfName=file.name;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    _managerPdfData=ev.target.result;
+    document.getElementById('pdf-upload-label').textContent='✅ '+file.name;
+    toast('PDF loaded — hit Send to share!');
+  };reader.readAsDataURL(file);e.target.value='';
+};
+window.sendPdfToAll=async function(){
+  if(!isGod()){toast('Manager only!');return;}
+  if(!_managerPdfData){toast('Select a PDF first!');return;}
+  const note=document.getElementById('pdf-msg').value.trim();
+  const u=users[loggedInId]||defaultProfiles[loggedInId];
+  const entry={id:Date.now().toString(36),name:_managerPdfName,note,data:_managerPdfData,ts:Date.now(),sentBy:u.name};
+  /* save to PDF library */
+  const lib=_getPdfLib();lib.push(entry);_savePdfLib(lib);
+  /* post to group chat */
+  await push(ref(db,'groupchat'),{senderId:loggedInId,senderName:u.name,initials:(u.initials||u.name||'?')[0],logoUrl:u.logoUrl||'',pdfMsg:true,pdfData:_managerPdfData,pdfLabel:_managerPdfName,pdfNote:note,ts:Date.now()});
+  /* notify everyone */
+  allIds().filter(id=>id!==loggedInId).forEach(id=>{_storeOfflineNotif(id,'📄','Manager shared a PDF: '+_managerPdfName);});
+  _managerPdfData=null;_managerPdfName='document.pdf';
+  document.getElementById('pdf-upload-label').textContent='📎 Click to choose a PDF file';
+  document.getElementById('pdf-msg').value='';
+  toast('📄 PDF sent to everyone!');
+};
+
+window.renderPdfLibrary=function(){
+  const lib=_getPdfLib();
+  const container=document.getElementById('pdf-library-list');
+  if(!container)return;
+  if(!lib.length){container.innerHTML='<div class="card"><div class="empty">No PDFs shared yet.</div></div>';return;}
+  container.innerHTML=lib.slice().reverse().map(p=>{
+    const date=new Date(p.ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    const delBtn=isGod()?`<button class="btn btn-sm btn-danger" onclick="deletePdf('${p.id}')">🗑️</button>`:'';
+    return `<div class="card" style="display:flex;align-items:center;gap:14px;padding:16px;">
+      <div style="font-size:2.2rem;flex-shrink:0;">📄</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(p.name)}</div>
+        ${p.note?`<div style="font-size:12px;color:var(--text-2);margin-top:2px;">${esc(p.note)}</div>`:''}
+        <div style="font-size:11px;color:var(--text-3);margin-top:3px;">Shared by ${esc(p.sentBy)} · ${date}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <a href="${p.data}" download="${esc(p.name)}" class="btn btn-primary" style="font-size:12px;padding:6px 14px;text-decoration:none;">⬇️ Download</a>
+        ${delBtn}
+      </div>
+    </div>`;
+  }).join('');
+};
+window.deletePdf=function(id){
+  if(!isGod())return;
+  if(!confirm('Remove this PDF from the library?'))return;
+  const lib=_getPdfLib().filter(p=>p.id!==id);_savePdfLib(lib);renderPdfLibrary();toast('PDF removed');
+};
 
 /* Request browser notification permission on first interaction */
 function _requestNotifPerm(){
