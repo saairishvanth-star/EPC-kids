@@ -2856,4 +2856,158 @@ function _drawBall(a){
 function _drawBeams(a){
   if(!_discoCtx)return;
   _discoCanvas.width=window.innerWidth;_discoCanvas.height=window.innerHeight;_discoCtx.clearRect(0,0,_discoCanvas.width,_discoCanvas.height);
-  const ox
+  const ox=window.innerWidth/2,oy=80;
+  for(let i=0;i<14;i++){const ang=(i/14)*Math.PI*2+a*1.5,col=_TC[i%_TC.length];
+    const gd=_discoCtx.createLinearGradient(ox,oy,ox+Math.cos(ang)*window.innerWidth,oy+Math.sin(ang)*window.innerHeight);
+    gd.addColorStop(0,col+'cc');gd.addColorStop(0.3,col+'44');gd.addColorStop(1,col+'00');
+    _discoCtx.save();_discoCtx.beginPath();const sp=0.03;
+    _discoCtx.moveTo(ox,oy);_discoCtx.lineTo(ox+Math.cos(ang-sp)*window.innerWidth,oy+Math.sin(ang-sp)*window.innerHeight);_discoCtx.lineTo(ox+Math.cos(ang+sp)*window.innerWidth,oy+Math.sin(ang+sp)*window.innerHeight);
+    _discoCtx.closePath();_discoCtx.fillStyle=gd;_discoCtx.globalAlpha=0.15;_discoCtx.fill();_discoCtx.restore();
+  }
+  for(let i=0;i<8;i++){const sa=(i/8)*Math.PI*2+a*2.1,sx=window.innerWidth/2+Math.cos(sa)*window.innerWidth*0.35,sy=window.innerHeight-40;
+    const sc=_TC[(i+2)%_TC.length],sg=_discoCtx.createRadialGradient(sx,sy,0,sx,sy,60);
+    sg.addColorStop(0,sc+'88');sg.addColorStop(1,sc+'00');
+    _discoCtx.beginPath();_discoCtx.ellipse(sx,sy,60,20,0,0,Math.PI*2);_discoCtx.fillStyle=sg;_discoCtx.globalAlpha=0.35;_discoCtx.fill();
+  }
+}
+
+function _animDisco(){if(!partyOn)return;_discoAngle+=0.012;_drawBall(_discoAngle);_drawBeams(_discoAngle);_discoRaf=requestAnimationFrame(_animDisco);}
+function _startDisco(){if(_discoRaf)cancelAnimationFrame(_discoRaf);if(_discoCanvas){_discoCanvas.width=window.innerWidth;_discoCanvas.height=window.innerHeight;}_animDisco();}
+function _stopDisco(){if(_discoRaf)cancelAnimationFrame(_discoRaf);_discoRaf=null;if(_discoCtx)_discoCtx.clearRect(0,0,_discoCanvas.width,_discoCanvas.height);if(_ballCtx)_ballCtx.clearRect(0,0,100,100);}
+
+function _startConfetti(){if(!_confCanvas)return;_confCanvas.width=window.innerWidth;_confCanvas.height=window.innerHeight;_confPieces=Array.from({length:120},()=>({x:Math.random()*_confCanvas.width,y:Math.random()*_confCanvas.height-_confCanvas.height,r:Math.random()*7+3,c:`hsl(${Math.random()*360},100%,60%)`,s:Math.random()*3+1,a:Math.random()*360}));_loopConf();}
+function _loopConf(){if(!partyOn)return;_confCtx.clearRect(0,0,_confCanvas.width,_confCanvas.height);_confPieces.forEach(p=>{p.y+=p.s;p.a+=3;if(p.y>_confCanvas.height){p.y=-10;p.x=Math.random()*_confCanvas.width;}_confCtx.save();_confCtx.translate(p.x,p.y);_confCtx.rotate(p.a*Math.PI/180);_confCtx.fillStyle=p.c;_confCtx.fillRect(-p.r/2,-p.r/2,p.r,p.r);_confCtx.restore();});requestAnimationFrame(_loopConf);}
+
+function _applyParty(on){
+  document.body.classList.toggle('party-on',on);
+  if(on){_startConfetti();_startDisco();}else{_stopDisco();}
+}
+
+/* ══════════ CHAT IMAGE UPLOAD ══════════ */
+window.sendChatImage=function(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      const maxW=400,maxH=400,scale=Math.min(1,maxW/img.width,maxH/img.height);
+      const c=document.createElement('canvas');c.width=img.width*scale;c.height=img.height*scale;
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      const data=c.toDataURL('image/jpeg',0.6);
+      const u=users[loggedInId]||defaultProfiles[loggedInId];
+      push(ref(db,'groupchat'),{senderId:loggedInId,senderName:u.name,initials:(u.initials||u.name||'?')[0],logoUrl:u.logoUrl||'',imgData:data,ts:Date.now()});
+    };img.src=ev.target.result;
+  };reader.readAsDataURL(file);e.target.value='';
+};
+
+/* patch renderChat to support images */
+const _origRenderChat=window.renderChat||null;
+window.renderChat=function(data){
+  const box=document.getElementById('chat-msgs');
+  const msgs=Object.values(data).sort((a,b)=>a.ts-b.ts);
+  if(!msgs.length){box.innerHTML='<div class="chat-empty">No messages yet</div>';return;}
+  box.innerHTML=msgs.map(m=>{
+    const mine=parseInt(m.senderId)===loggedInId;
+    const av=m.logoUrl?`<img src="${m.logoUrl}"/>`:(m.initials||'?');
+    const time=new Date(m.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    const content=m.imgData?`<img class="msg-img" src="${m.imgData}" onclick="this.requestFullscreen&&this.requestFullscreen()"/>`:`<div class="msg-bubble">${esc(m.text||'')}</div>`;
+    return `<div class="msg ${mine?'mine':''}"><div class="av av-sm">${av}</div><div class="msg-body">${!mine?`<div class="msg-sender">${esc(m.senderName)}</div>`:''} ${content}<div class="msg-time">${time}</div></div></div>`;
+  }).join('');scrollChat();
+};
+
+/* ══════════ STAR RATINGS ══════════ */
+const _LS_R='epckids_ratings';
+let _ratings={};
+try{_ratings=JSON.parse(localStorage.getItem(_LS_R)||'{}');}catch(e){}
+function _saveRatings(){try{localStorage.setItem(_LS_R,JSON.stringify(_ratings));}catch(e){}}
+function _avgRating(id){const r=_ratings[id];if(!r)return 0;const v=Object.values(r);return v.length?v.reduce((a,b)=>a+b,0)/v.length:0;}
+function _starsHtml(id,interactive){
+  const my=(_ratings[id]&&_ratings[id][loggedInId])||0;
+  const avg=_avgRating(id);const show=interactive?my:avg;
+  return Array.from({length:5},(_,i)=>`<span class="star${i<Math.round(show)?' lit':''}" ${interactive?`onclick="rateUser(${id},${i+1})" onmouseover="_hoverStars(this,${i+1})" onmouseout="_resetStars(this.parentElement,${id})"`:''}>★</span>`).join('');
+}
+window._hoverStars=function(el,n){[...el.parentElement.querySelectorAll('.star')].forEach((s,i)=>{s.classList.toggle('lit',i<n);});};
+window._resetStars=function(row,id){const my=(_ratings[id]&&_ratings[id][loggedInId])||0;[...row.querySelectorAll('.star')].forEach((s,i)=>s.classList.toggle('lit',i<my));};
+window.rateUser=function(id,stars){if(!loggedInId||id===loggedInId)return;if(!_ratings[id])_ratings[id]={};_ratings[id][loggedInId]=stars;_saveRatings();renderMembers();renderProfile();toast('Rated '+stars+' ⭐');};
+
+/* patch renderMembers to show star ratings */
+const _origRenderMembers=window.renderMembers;
+window.renderMembers=function(){
+  _origRenderMembers();
+  /* append ratings under each member name */
+  allIds().forEach(id=>{
+    const card=document.querySelector(`.member[onclick="viewMember(${id})"]`);
+    if(!card)return;
+    const info=card.querySelector('.member-info');if(!info)return;
+    let ratingEl=info.querySelector('.member-rating');
+    if(!ratingEl){ratingEl=document.createElement('div');ratingEl.className='member-rating';info.appendChild(ratingEl);}
+    const avg=_avgRating(id);
+    ratingEl.textContent=avg>0?('★').repeat(Math.round(avg))+('☆').repeat(5-Math.round(avg)):'☆☆☆☆☆';
+    ratingEl.style.color=avg>0?'var(--gold)':'#333';
+  });
+};
+
+/* patch renderProfile to show interactive stars */
+const _origRenderProfile=window.renderProfile;
+window.renderProfile=function(){
+  _origRenderProfile();
+  const area=document.getElementById('profile-area');if(!area)return;
+  const badgeRow=area.querySelector('.profile-badge-row');if(!badgeRow)return;
+  const canRate=loggedInId&&viewingId!==loggedInId;
+  const avg=_avgRating(viewingId),cnt=_ratings[viewingId]?Object.keys(_ratings[viewingId]).length:0;
+  const div=document.createElement('div');div.className='stars-row';
+  div.innerHTML=_starsHtml(viewingId,canRate)+`<span class="rating-avg">${avg>0?avg.toFixed(1)+' ('+cnt+')':'No ratings'}</span>`;
+  badgeRow.after(div);
+  if(canRate){const hint=document.createElement('div');hint.style.cssText='font-size:10px;color:var(--text-3);margin-top:2px;';hint.textContent='Tap stars to rate';div.after(hint);}
+};
+
+init();
+</script>
+
+<div id="call-notif-popup">
+  <div class="cnp-card">
+    <div class="cnp-icon">📞</div>
+    <div>
+      <div class="cnp-title">Call Started!</div>
+      <div class="cnp-msg" id="cnp-msg">Someone started a call</div>
+      <div class="cnp-btns">
+        <button class="btn btn-primary" style="padding:5px 12px;font-size:11px;" onclick="joinFromNotif()">Join</button>
+        <button class="btn" style="padding:5px 12px;font-size:11px;" onclick="dismissCallNotif()">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BACKGROUND PICKER PANEL -->
+<div id="bg-panel" style="display:none;position:fixed;bottom:70px;left:16px;z-index:9990;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;width:240px;box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+  <div style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:12px;color:var(--accent);">BACKGROUND</div>
+  <div class="bg-picker">
+    <div class="bg-swatch active" style="background:#06070b;" onclick="setBg('neon','this')" title="Dark Neon"></div>
+    <div class="bg-swatch" style="background:#070d1a;" onclick="setBg('midnight','this')" title="Midnight Blue"></div>
+    <div class="bg-swatch" style="background:#040d07;" onclick="setBg('forest','this')" title="Dark Forest"></div>
+    <div class="bg-swatch" style="background:#0a060f;" onclick="setBg('purple','this')" title="Dark Purple"></div>
+    <div class="bg-swatch" style="background:#0f0505;" onclick="setBg('red','this')" title="Dark Red"></div>
+    <div class="bg-swatch" style="background:#0f0d08;" onclick="setBg('warm','this')" title="Dark Warm"></div>
+    <div class="bg-swatch" style="background:linear-gradient(135deg,#06070b,#0a0515,#070b10);" onclick="setBg('gradient','this')" title="Gradient"></div>
+    <div class="bg-swatch" style="background:repeating-linear-gradient(0deg,#06070b,#06070b 24px,#0a0f06 24px,#0a0f06 25px);" onclick="setBg('matrix','this')" title="Matrix"></div>
+    <div class="bg-swatch" style="background:#f5f5f0;border:1px solid #ddd;" onclick="setBg('white','this')" title="Light"></div>
+    <div class="bg-swatch" style="background:#f8f4e8;border:1px solid #ddd;" onclick="setBg('paper','this')" title="Paper"></div>
+  </div>
+  <div style="font-family:'Orbitron',sans-serif;font-size:10px;color:var(--text-2);margin-bottom:8px;letter-spacing:0.08em;">CUSTOM COLOR</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <input type="color" id="custom-bg-color" value="#06070b" style="width:40px;height:32px;border:none;border-radius:6px;cursor:pointer;padding:0;background:none;"/>
+    <button class="btn" style="flex:1;font-size:11px;" onclick="setCustomBg()">Apply</button>
+  </div>
+</div>
+
+<div id="dm-notif-toast">
+  <div class="dm-notif-card" onclick="openDmFromNotif()" style="cursor:pointer;">
+    <div class="dm-notif-av" id="dnt-av">?</div>
+    <div>
+      <div class="dm-notif-name" id="dnt-name">New message</div>
+      <div class="dm-notif-msg" id="dnt-msg">…</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
